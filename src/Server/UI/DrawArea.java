@@ -1,7 +1,8 @@
 package Server.UI;
 
-import Server.shape.*;
-import Server.shape.Shape;
+import client.UI.WhiteBoard;
+import client.shape.*;
+import client.shape.Shape;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +27,7 @@ public class DrawArea extends JPanel {
     private String stytle; // Current character style
     private float stroke = 1.0f; // set brush size and initialize it as 1.0
 
-    DrawArea(WhiteBoard wb) {
+    public DrawArea(WhiteBoard wb) {
         whiteboard = wb;
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         // Set the cursor as a crossing
@@ -74,6 +75,11 @@ public class DrawArea extends JPanel {
      */
     private void draw(Graphics2D g2d, Shape i) {
         i.draw(g2d);
+    }
+
+    public void addShape(Shape shape){
+        System.out.println(shapeList.size());
+        this.shapeList.add(shape);
     }
 
     private void createNewShape() {
@@ -129,7 +135,6 @@ public class DrawArea extends JPanel {
             shape.stroke = stroke;
             this.lastShape = this.currentShape;
             this.currentShape = shape;
-            shapeList.add(shape);
         }
     }
 
@@ -205,6 +210,7 @@ public class DrawArea extends JPanel {
         @Override
         public void mousePressed(MouseEvent me) {
             createNewShape();
+            addShape(currentShape);
             whiteboard.setStratBar("Mouse clicked at：[" + me.getX() + " ,"
                     + me.getY() + "]");
             // Set instruction for start bar
@@ -224,18 +230,16 @@ public class DrawArea extends JPanel {
                 currentChoice = 14;
                 repaint();
             }
-
         }
 
         @Override
         public void mouseReleased(MouseEvent me) {
-            // TODO mouse loosen
             whiteboard.setStratBar("Mouse loosen at：[" + me.getX() + " ,"
                     + me.getY() + "]");
             if (currentChoice == 3 || currentChoice == 13) {
                 currentShape.x1 = me.getX();
                 currentShape.y1 = me.getY();
-            } else {
+            } else if(currentChoice != 14){
                 if (me.getY() >= currentShape.iy) {
                     currentShape.x1 = me.getX();
                     currentShape.y1 = me.getY();
@@ -246,7 +250,6 @@ public class DrawArea extends JPanel {
                     currentShape.y2 = me.getY();
                     currentShape.x1 = currentShape.ix;
                     currentShape.y1 = currentShape.iy;
-
                 }
             }
             repaint();
@@ -268,7 +271,8 @@ public class DrawArea extends JPanel {
                         .getX();
                 lastShape.y1 = currentShape.y2 = currentShape.y1 = me
                         .getY();
-            } else {
+                addShape(currentShape);
+            } else if(currentChoice != 14){
                 if (me.getY() >= currentShape.iy) {
                     currentShape.x1 = me.getX();
                     currentShape.y1 = me.getY();
