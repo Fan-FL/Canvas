@@ -1,5 +1,4 @@
 *.class
-.idea
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -62,3 +61,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/.idea/
+/out/
