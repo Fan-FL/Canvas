@@ -26,7 +26,7 @@ public class FileHandler {
         drawarea.setCurrentShapeType(DrawArea.ShapeType.PENCIL);    //Set default pen as pencil
         drawarea.setColor(Color.black);    //Set default color
         drawarea.setStroke(1.0f);        //Set size of the pen
-        drawarea.shapeList.clear();
+        drawarea.clearCanvas();
         drawarea.repaint();
     }
 
@@ -37,7 +37,7 @@ public class FileHandler {
         JFileChooser filechooser = new JFileChooser();
         filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "JPG & GIF Images", "jpg", "gif");
+                "Canvas Images", "cvs");
         //Show .jpg and .gif image only
         filechooser.setFileFilter(filter);
         int returnVal = filechooser.showOpenDialog(whiteboard);
@@ -52,6 +52,7 @@ public class FileHandler {
             JOptionPane.showMessageDialog(filechooser, "File name", "Please input filename！", JOptionPane.ERROR_MESSAGE);
         } else {
             try {
+                drawarea.clearCanvas();
                 FileInputStream ifs = new FileInputStream(fileName);
                 ObjectInputStream input = new ObjectInputStream(ifs);
 
@@ -94,7 +95,7 @@ public class FileHandler {
         } else {
             try {
                 fileName.delete();
-                FileOutputStream fos = new FileOutputStream(fileName + ".xxh");
+                FileOutputStream fos = new FileOutputStream(fileName + ".cvs");
                 //Output file in the form of bytes
                 ObjectOutputStream output = new ObjectOutputStream(fos);
                 //Shape record;

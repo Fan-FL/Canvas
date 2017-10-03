@@ -1,6 +1,5 @@
 package client.UI;
 
-import client.UI.WhiteBoard;
 import client.shape.*;
 import client.shape.Shape;
 
@@ -38,8 +37,8 @@ public class DrawArea extends JPanel {
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         // Set the cursor as a crossing
         setBackground(Color.white); // Set the background as white
-        addMouseListener(new MouseA()); // Add mouse activity
-        addMouseMotionListener(new MouseB());
+        addMouseListener(new MyMouseAdapter()); // Add mouse activity
+        addMouseMotionListener(new MyMouseMotionAdapter());
         createNewShape();
 
     }
@@ -61,8 +60,10 @@ public class DrawArea extends JPanel {
         this.stytle = stytle;
     }
 
-    public void clearShapeList() {
+    public void clearCanvas() {
         this.shapeList.clear();
+        this.currentShape = null;
+        this.lastShape = null;
     }
 
     @Override
@@ -74,7 +75,9 @@ public class DrawArea extends JPanel {
                 draw(g2d, shape);
             }
         }
-        draw(g2d, currentShape);
+        if(currentShape!=null){
+            draw(g2d, currentShape);
+        }
     }
 
     /*
@@ -86,6 +89,7 @@ public class DrawArea extends JPanel {
 
     public void addShape(Shape shape){
         this.shapeList.add(shape);
+        repaint();
         System.out.println(shapeList.size());
     }
 
@@ -198,7 +202,7 @@ public class DrawArea extends JPanel {
     /*
         The corresponding responses for the mouse actions
      */
-    class MouseA extends MouseAdapter {
+    class MyMouseAdapter extends MouseAdapter {
 
         @Override
         public void mouseEntered(MouseEvent me) {
@@ -216,28 +220,30 @@ public class DrawArea extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent me) {
+            // Create new graph object
             createNewShape();
             whiteboard.setStratBar("Mouse clicked at：[" + me.getX() + " ,"
                     + me.getY() + "]");
-            // Set instruction for start bar
-            currentShape.x1 = currentShape.x2 = currentShape.ix = me.getX();
-            currentShape.y1 = currentShape.y2 = currentShape.iy = me.getY();
 
-            // Function for text input
-            if (currentShapeType == ShapeType.WORD) {
-                currentShape.x1 = me.getX();
-                currentShape.y1 = me.getY();
-                String input;
-                input = JOptionPane.showInputDialog("Please enter your input！");
-                currentShape.s1 = input;
-                currentShape.x2 = f1;
-                currentShape.y2 = f2;
-                currentShape.s2 = stytle;
-                currentShapeType = ShapeType.WORD;
-                addShape(currentShape);
-                repaint();
-            }else if (currentShapeType == ShapeType.PENCIL || currentShapeType == ShapeType.RUBBER){
-                addShape(currentShape);
+            switch (currentShapeType) {
+                case RUBBER:
+                    currentShape.dotsX.add(me.getX());
+                    currentShape.dotxY.add(me.getY());
+                    break;
+                case LINE:
+                case RECT:
+                case FILLRECT:
+                case OVAL:
+                case FILLOVAL:
+                case CIRCLE:
+                case FILLCIRCLE:
+                case ROUNDRECT:
+                case FILLROUNDRECT:
+                    currentShape.x1 = currentShape.x2 = currentShape.ix = me.getX();
+                    currentShape.y1 = currentShape.y2 = currentShape.iy = me.getY();
+                    break;
+                case WORD:
+                    break;
             }
         }
 
@@ -245,55 +251,122 @@ public class DrawArea extends JPanel {
         public void mouseReleased(MouseEvent me) {
             whiteboard.setStratBar("Mouse loosen at：[" + me.getX() + " ,"
                     + me.getY() + "]");
-            if (currentShapeType == ShapeType.PENCIL || currentShapeType == ShapeType.RUBBER) {
-                currentShape.x1 = me.getX();
-                currentShape.y1 = me.getY();
-            } else if(currentShapeType != ShapeType.WORD){
-                if (me.getY() >= currentShape.iy) {
-                    currentShape.x1 = me.getX();
-                    currentShape.y1 = me.getY();
-                    currentShape.x2 = currentShape.ix;
-                    currentShape.y2 = currentShape.iy;
-                } else {
+
+            switch (currentShapeType) {
+                case PENCIL:
+                case RUBBER:
+                    currentShape.dotsX.add(me.getX());
+                    currentShape.dotxY.add(me.getY());
+                    break;
+                case LINE:
                     currentShape.x2 = me.getX();
                     currentShape.y2 = me.getY();
-                    currentShape.x1 = currentShape.ix;
-                    currentShape.y1 = currentShape.iy;
-                }
-                addShape(currentShape);
+                    break;
+                case RECT:
+                case FILLRECT:
+                case OVAL:
+                case FILLOVAL:
+                case CIRCLE:
+                case FILLCIRCLE:
+                case ROUNDRECT:
+                case FILLROUNDRECT:
+                    if (me.getY() >= currentShape.iy) {
+                        if(me.getX() > currentShape.ix){
+                            currentShape.x1 = me.getX();
+                            currentShape.y1 = me.getY();
+                            currentShape.x2 = currentShape.ix;
+                            currentShape.y2 = currentShape.iy;
+                        }else{
+                            currentShape.x1 = currentShape.ix;
+                            currentShape.y1 = me.getY();
+                            currentShape.x2 = me.getX();
+                            currentShape.y2 = currentShape.iy;
+                        }
+                    } else {
+                        if(me.getX() > currentShape.ix){
+                            currentShape.x1 = me.getX();
+                            currentShape.y1 = currentShape.iy;
+                            currentShape.x2 = currentShape.ix;
+                            currentShape.y2 = me.getY();
+                        }else{
+                            currentShape.x1 = currentShape.ix;
+                            currentShape.y1 = currentShape.iy;
+                            currentShape.x2 = me.getX();
+                            currentShape.y2 = me.getY();
+                        }
+                    }
+                    break;
+                case WORD:
+                    currentShape.x1 = me.getX();
+                    currentShape.y1 = me.getY();
+                    String input;
+                    input = JOptionPane.showInputDialog("Please enter your input！");
+                    currentShape.s1 = input;
+                    currentShape.x2 = f1;
+                    currentShape.y2 = f2;
+                    currentShape.s2 = stytle;
+                    currentShapeType = ShapeType.WORD;
+                    break;
             }
-            repaint();
+            addShape(currentShape);
         }
-
     }
 
     /*
         The corresponding reaction for scroll and drag of the mouse
      */
-    class MouseB extends MouseMotionAdapter {
-        public void mouseDragged(MouseEvent me) // Drag mouse operation
-        {
+    class MyMouseMotionAdapter extends MouseMotionAdapter {
+        // Drag mouse operation
+        public void mouseDragged(MouseEvent me){
             whiteboard.setStratBar("Mouse dragged at：[" + me.getX() + " ,"
                     + me.getY() + "]");
-            if (currentShapeType == ShapeType.PENCIL || currentShapeType == ShapeType.RUBBER) {
-                createNewShape(); // Create new graph object
-                lastShape.x1 = currentShape.x2 = currentShape.x1 = me
-                        .getX();
-                lastShape.y1 = currentShape.y2 = currentShape.y1 = me
-                        .getY();
-                addShape(currentShape);
-            } else if(currentShapeType != ShapeType.WORD){
-                if (me.getY() >= currentShape.iy) {
-                    currentShape.x1 = me.getX();
-                    currentShape.y1 = me.getY();
-                    currentShape.x2 = currentShape.ix;
-                    currentShape.y2 = currentShape.iy;
-                } else {
+            switch (currentShapeType) {
+                case PENCIL:
+                case RUBBER:
+                    currentShape.dotsX.add(me.getX());
+                    currentShape.dotxY.add(me.getY());
+                    break;
+                case LINE:
                     currentShape.x2 = me.getX();
                     currentShape.y2 = me.getY();
-                    currentShape.x1 = currentShape.ix;
-                    currentShape.y1 = currentShape.iy;
+                    break;
+                case RECT:
+                case FILLRECT:
+                case OVAL:
+                case FILLOVAL:
+                case CIRCLE:
+                case FILLCIRCLE:
+                case ROUNDRECT:
+                case FILLROUNDRECT: {
+                    if (me.getY() >= currentShape.iy) {
+                        if (me.getX() > currentShape.ix) {
+                            currentShape.x1 = me.getX();
+                            currentShape.y1 = me.getY();
+                            currentShape.x2 = currentShape.ix;
+                            currentShape.y2 = currentShape.iy;
+                        } else {
+                            currentShape.x1 = currentShape.ix;
+                            currentShape.y1 = me.getY();
+                            currentShape.x2 = me.getX();
+                            currentShape.y2 = currentShape.iy;
+                        }
+                    } else {
+                        if (me.getX() > currentShape.ix) {
+                            currentShape.x1 = me.getX();
+                            currentShape.y1 = currentShape.iy;
+                            currentShape.x2 = currentShape.ix;
+                            currentShape.y2 = me.getY();
+                        } else {
+                            currentShape.x1 = currentShape.ix;
+                            currentShape.y1 = currentShape.iy;
+                            currentShape.x2 = me.getX();
+                            currentShape.y2 = me.getY();
+                        }
+                    }
+                    break;
                 }
+                case WORD:
+                    break;
             }
             repaint();
         }
