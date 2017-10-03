@@ -22,7 +22,7 @@ public class FileHandler {
         Create a new image
      */
     public void newFile() {
-        drawarea.setCurrentChoice(3);    //Set default pen as pencil
+        drawarea.setCurrentShapeType(DrawArea.ShapeType.PENCIL);    //Set default pen as pencil
         drawarea.setColor(Color.black);    //Set default color
         drawarea.setStroke(1.0f);        //Set size of the pen
         drawarea.shapeList.clear();

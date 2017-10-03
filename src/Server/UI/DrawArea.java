@@ -1,8 +1,8 @@
 package Server.UI;
 
-import client.UI.WhiteBoard;
-import client.shape.*;
-import client.shape.Shape;
+import Server.UI.WhiteBoard;
+import Server.shape.*;
+import Server.shape.Shape;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,10 +14,15 @@ import java.awt.event.MouseMotionAdapter;
     The DrawArea class is about the painting action of the mouse
  */
 public class DrawArea extends JPanel {
+    public enum ShapeType {
+        PENCIL, LINE, RECT, FILLRECT, OVAL, FILLOVAL,
+        CIRCLE, FILLCIRCLE, ROUNDRECT, FILLROUNDRECT, RUBBER, WORD;
+    }
+
     private WhiteBoard whiteboard = null;
     public java.util.List<Shape> shapeList = new java.util.ArrayList<Shape>(); // drawing graphs
 
-    private int currentChoice = 3; // Set default pen as Pencil
+    private ShapeType currentShapeType = ShapeType.PENCIL; // Set default pen as Pencil
     private Shape currentShape = null;
     private Shape lastShape = null;
     private Color color = Color.black; // current color of the pen
@@ -68,6 +73,7 @@ public class DrawArea extends JPanel {
                 draw(g2d, shape);
             }
         }
+        draw(g2d, currentShape);
     }
 
     /*
@@ -78,57 +84,57 @@ public class DrawArea extends JPanel {
     }
 
     public void addShape(Shape shape){
-        System.out.println(shapeList.size());
         this.shapeList.add(shape);
+        System.out.println(shapeList.size());
     }
 
     private void createNewShape() {
-        if (currentChoice == 14) {
+        if (currentShapeType == ShapeType.WORD) {
             setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
         } else {
             setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
         }
         Shape shape = null;
-        switch (currentChoice) {
-            case 3:
+        switch (currentShapeType) {
+            case PENCIL:
                 shape = new Pencil();
                 break;
-            case 4:
+            case LINE:
                 shape = new Line();
                 break;
-            case 5:
+            case RECT:
                 shape = new Rect();
                 break;
-            case 6:
+            case FILLRECT:
                 shape = new FillRect();
                 break;
-            case 7:
+            case OVAL:
                 shape = new Oval();
                 break;
-            case 8:
+            case FILLOVAL:
                 shape = new FillOval();
                 break;
-            case 9:
+            case CIRCLE:
                 shape = new Circle();
                 break;
-            case 10:
+            case FILLCIRCLE:
                 shape = new FillCircle();
                 break;
-            case 11:
+            case ROUNDRECT:
                 shape = new RoundRect();
                 break;
-            case 12:
+            case FILLROUNDRECT:
                 shape = new FillRoundRect();
                 break;
-            case 13:
+            case RUBBER:
                 shape = new Rubber();
                 break;
-            case 14:
+            case WORD:
                 shape = new Word();
                 break;
         }
         if (shape != null) {
-            shape.type = currentChoice;
+            shape.type = currentShapeType;
             shape.R = R;
             shape.G = G;
             shape.B = B;
@@ -174,8 +180,8 @@ public class DrawArea extends JPanel {
     /*
         Text input
      */
-    public void setCurrentChoice(int i) {
-        currentChoice = i;
+    public void setCurrentShapeType(ShapeType shapeType) {
+        currentShapeType = shapeType;
     }
 
     /*
@@ -210,7 +216,6 @@ public class DrawArea extends JPanel {
         @Override
         public void mousePressed(MouseEvent me) {
             createNewShape();
-            addShape(currentShape);
             whiteboard.setStratBar("Mouse clicked at：[" + me.getX() + " ,"
                     + me.getY() + "]");
             // Set instruction for start bar
@@ -218,7 +223,7 @@ public class DrawArea extends JPanel {
             currentShape.y1 = currentShape.y2 = currentShape.iy = me.getY();
 
             // Function for text input
-            if (currentChoice == 14) {
+            if (currentShapeType == ShapeType.WORD) {
                 currentShape.x1 = me.getX();
                 currentShape.y1 = me.getY();
                 String input;
@@ -227,8 +232,11 @@ public class DrawArea extends JPanel {
                 currentShape.x2 = f1;
                 currentShape.y2 = f2;
                 currentShape.s2 = stytle;
-                currentChoice = 14;
+                currentShapeType = ShapeType.WORD;
+                addShape(currentShape);
                 repaint();
+            }else if (currentShapeType == ShapeType.PENCIL || currentShapeType == ShapeType.RUBBER){
+                addShape(currentShape);
             }
         }
 
@@ -236,10 +244,10 @@ public class DrawArea extends JPanel {
         public void mouseReleased(MouseEvent me) {
             whiteboard.setStratBar("Mouse loosen at：[" + me.getX() + " ,"
                     + me.getY() + "]");
-            if (currentChoice == 3 || currentChoice == 13) {
+            if (currentShapeType == ShapeType.PENCIL || currentShapeType == ShapeType.RUBBER) {
                 currentShape.x1 = me.getX();
                 currentShape.y1 = me.getY();
-            } else if(currentChoice != 14){
+            } else if(currentShapeType != ShapeType.WORD){
                 if (me.getY() >= currentShape.iy) {
                     currentShape.x1 = me.getX();
                     currentShape.y1 = me.getY();
@@ -251,6 +259,7 @@ public class DrawArea extends JPanel {
                     currentShape.x1 = currentShape.ix;
                     currentShape.y1 = currentShape.iy;
                 }
+                addShape(currentShape);
             }
             repaint();
         }
@@ -265,14 +274,14 @@ public class DrawArea extends JPanel {
         {
             whiteboard.setStratBar("Mouse dragged at：[" + me.getX() + " ,"
                     + me.getY() + "]");
-            if (currentChoice == 3 || currentChoice == 13) {
+            if (currentShapeType == ShapeType.PENCIL || currentShapeType == ShapeType.RUBBER) {
                 createNewShape(); // Create new graph object
                 lastShape.x1 = currentShape.x2 = currentShape.x1 = me
                         .getX();
                 lastShape.y1 = currentShape.y2 = currentShape.y1 = me
                         .getY();
                 addShape(currentShape);
-            } else if(currentChoice != 14){
+            } else if(currentShapeType != ShapeType.WORD){
                 if (me.getY() >= currentShape.iy) {
                     currentShape.x1 = me.getX();
                     currentShape.y1 = me.getY();
@@ -284,7 +293,6 @@ public class DrawArea extends JPanel {
                     currentShape.x1 = currentShape.ix;
                     currentShape.y1 = currentShape.iy;
                 }
-
             }
             repaint();
         }

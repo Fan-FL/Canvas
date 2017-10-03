@@ -286,7 +286,7 @@ public class WhiteBoard extends JFrame implements ActionListener {
 
         for (int i = 3; i <= 13; i++) {
             if (e.getSource() == button[i]) {
-                drawarea.setCurrentChoice(i);
+                drawarea.setCurrentShapeType(DrawArea.ShapeType.values()[i-3]);
                 drawarea.repaint();
             }
 
@@ -314,7 +314,7 @@ public class WhiteBoard extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null,
                     "please click on canvs to confirm position of textinput",
                     "hints", JOptionPane.INFORMATION_MESSAGE);
-            drawarea.setCurrentChoice(14);
+            drawarea.setCurrentShapeType(DrawArea.ShapeType.WORD);
             drawarea.repaint();
         } else if (e.getSource() == helpin){
             // Help info
