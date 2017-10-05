@@ -1,6 +1,7 @@
 package client.file;
 
 import client.UI.DrawArea;
+import client.UI.WhiteBoard;
 import client.UI.WhiteBoardC;
 import client.shape.Shape;
 
@@ -11,10 +12,10 @@ import javax.swing.*;
 import javax.swing.filechooser.*;
 
 public class FileHandler {
-    private WhiteBoardC whiteboard;
+    private WhiteBoard whiteboard;
     DrawArea drawarea = null;
 
-    public FileHandler(WhiteBoardC wb, DrawArea da) {
+    public FileHandler(WhiteBoard wb, DrawArea da) {
         whiteboard = wb;
         drawarea = da;
     }
@@ -49,7 +50,7 @@ public class FileHandler {
         fileName.canRead();
         if (fileName == null || fileName.getName().equals("")) {
             //When file name does not exit
-            JOptionPane.showMessageDialog(filechooser, "File name", "Please input filename！", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(filechooser, "File name", "Please input filename锛�", JOptionPane.ERROR_MESSAGE);
         } else {
             try {
                 drawarea.clearCanvas();
@@ -66,11 +67,11 @@ public class FileHandler {
                 input.close();
                 drawarea.repaint();
             } catch (FileNotFoundException e) {
-                JOptionPane.showMessageDialog(whiteboard, "File path error！", "Source file not found！", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(whiteboard, "File path error锛�", "Source file not found锛�", JOptionPane.ERROR_MESSAGE);
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(whiteboard, "File read error！", "Cannot read this file", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(whiteboard, "File read error锛�", "Cannot read this file", JOptionPane.ERROR_MESSAGE);
             } catch (ClassNotFoundException e) {
-                JOptionPane.showMessageDialog(whiteboard, "Create object error！", "Already at the end of the file", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(whiteboard, "Create object error锛�", "Already at the end of the file", JOptionPane.ERROR_MESSAGE);
             }
 
         }
@@ -91,7 +92,7 @@ public class FileHandler {
         fileName.canWrite();
         if (fileName == null || fileName.getName().equals("")){
             //If the file name does not exit
-            JOptionPane.showMessageDialog(filechooser, "File name", "Please input file name！", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(filechooser, "File name", "Please input file name锛�", JOptionPane.ERROR_MESSAGE);
         } else {
             try {
                 fileName.delete();
