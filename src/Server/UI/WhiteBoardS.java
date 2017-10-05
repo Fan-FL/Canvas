@@ -15,380 +15,372 @@ import java.text.SimpleDateFormat;
 // Draw the main frame of the white board
 public class WhiteBoardS extends JFrame implements ActionListener {
 
-    private static final long serialVersionUID = -2551980583852173918L;
-    private JToolBar buttonpanel;
-    // define the button panel
-    private JMenuBar bar;
-    private JMenu file, color, stroke, help;
-    // four main menu of the button panel
-    private JMenuItem newfile, openfile, savefile, exit;
-    private JMenuItem helpin, helpmain, colorchoice, strokeitem;
-    private Icon nf, sf, of, ex;
-    // The icon objects of the button panel
-    private JLabel startbar;
-    private DrawArea drawarea;
-    private Help helpobject;
-    private FileHandler fileclass;
+	private static final long serialVersionUID = -2551980583852173918L;
+	private JToolBar buttonpanel;
+	// define the button panel
+	private JMenuBar bar;
+	private JMenu file, color, stroke, help;
+	// four main menu of the button panel
+	private JMenuItem newfile, openfile, savefile, exit;
+	private JMenuItem helpin, helpmain, colorchoice, strokeitem;
+	private Icon nf, sf, of, ex;
+	// The icon objects of the button panel
+	private JLabel startbar;
+	private DrawArea drawarea;
+	private Help helpobject;
+	private FileHandler fileclass;
 
-    private JPanel userinfo;
-    private JPanel chat;
-    
-    private JTextArea recvArea, sendArea;
-    private JPanel chatRoomPanel, recviveAreaPanel, recvAll, sendAreaPanel, sendButtonPanel, 
-    sendButtonAreaPanel;
-    private JLabel  chatRoom;
-    private JButton clear, send;
-    private JScrollPane recviveScroll, sendScroll;
-    
-    private JButton test;
+	private JPanel userinfo;
+	private JPanel chat;
 
-    String[] fontName;
-    // Define the name of the icons in the button panel
-    private String names[] = {"newfile", "openfile", "savefile", "pen",
-            "line", "rect", "frect", "oval", "foval", "circle", "fcircle",
-            "roundrect", "froundrect", "rubber", "color", "stroke", "word"};
-    private Icon icons[];
+	private JTextArea recvArea, sendArea;
+	private JPanel chatRoomPanel, recviveAreaPanel, sendAreaPanel,
+			sendButtonPanel, sendButtonAreaPanel;
+	private JLabel chatRoom;
+	private JButton clear, send;
+	private JScrollPane recviveScroll, sendScroll;
 
-    // Show instruction when the mouse moves above the button
-    private String tiptext[] = {"create a picture", "open a picture",
-            "save the picture", "freely draw", "draw a straight line",
-            "draw a hollow rectangle", "draw a solid rectangle",
-            "draw a hollow oval", "draw a solid oval", "draw a hollow circle",
-            "draw a solid circle", "draw a rounded corner rectangle",
-            "draw a solid rounded corner rectangle", "eraser", "color",
-            "brush size", "text input"};
-    JButton button[]; // define button group in toolbar
-    private JCheckBox bold, italic;
+	String[] fontName;
+	// Define the name of the icons in the button panel
+	private String names[] = { "newfile", "openfile", "savefile", "pen",
+			"line", "rect", "frect", "oval", "foval", "circle", "fcircle",
+			"roundrect", "froundrect", "rubber", "color", "stroke", "word" };
+	private Icon icons[];
 
-    private JComboBox stytles;
-    
-    Toolkit tool = getToolkit();
-    Dimension dim = tool.getScreenSize();// Get the size of current screen
+	// Show instruction when the mouse moves above the button
+	private String tiptext[] = { "create a picture", "open a picture",
+			"save the picture", "freely draw", "draw a straight line",
+			"draw a hollow rectangle", "draw a solid rectangle",
+			"draw a hollow oval", "draw a solid oval", "draw a hollow circle",
+			"draw a solid circle", "draw a rounded corner rectangle",
+			"draw a solid rounded corner rectangle", "eraser", "color",
+			"brush size", "text input" };
+	JButton button[]; // define button group in toolbar
+	private JCheckBox bold, italic;
 
-    public WhiteBoardS(String string) {
-        // TODO constructor of main interface
-        super(string);
-        // initial menu
-        file = new JMenu("file");
-        color = new JMenu("color");
-        stroke = new JMenu("brush");
-        help = new JMenu("help");
-        bar = new JMenuBar();// initial menu
+	private JComboBox stytles;
 
-        bar.add(file);
-        bar.add(color);
-        bar.add(stroke);
-        bar.add(help);
+	Toolkit tool = getToolkit();
+	Dimension dim = tool.getScreenSize();// Get the size of current screen
 
-        setJMenuBar(bar);
+	public WhiteBoardS(String string) {
+		// TODO constructor of main interface
+		super(string);
+		// initial menu
+		file = new JMenu("file");
+		color = new JMenu("color");
+		stroke = new JMenu("brush");
+		help = new JMenu("help");
+		bar = new JMenuBar();// initial menu
 
-        // Define short cut keys for the buttons
-        file.setMnemonic('F');
-        color.setMnemonic('C');
-        stroke.setMnemonic('S');
-        help.setMnemonic('H');
+		bar.add(file);
+		bar.add(color);
+		bar.add(stroke);
+		bar.add(help);
 
-        // File menu initialization
-        try {
-            Reader reader = new InputStreamReader(getClass()
-                    .getResourceAsStream("/icon"));
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Can't read image from the disk", "error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-        // Show the icons for the sub-buttons of File menu
-        nf = new ImageIcon(getClass().getResource("/icon/newfile.jpg"));
-        sf = new ImageIcon(getClass().getResource("/icon/savefile.jpg"));
-        of = new ImageIcon(getClass().getResource("/icon/openfile.jpg"));
-        ex = new ImageIcon(getClass().getResource("/icon/exit.jpg"));
-        newfile = new JMenuItem("new", nf);
-        openfile = new JMenuItem("open", of);
-        savefile = new JMenuItem("save", sf);
-        exit = new JMenuItem("exit", ex);
+		setJMenuBar(bar);
 
-        file.add(newfile);
-        file.add(openfile);
-        file.add(savefile);
-        file.add(exit);
+		// Define short cut keys for the buttons
+		file.setMnemonic('F');
+		color.setMnemonic('C');
+		stroke.setMnemonic('S');
+		help.setMnemonic('H');
 
-        // Add short cut keys for the buttons
-        newfile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
-                InputEvent.CTRL_MASK));
-        openfile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
-                InputEvent.CTRL_MASK));
-        savefile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-                InputEvent.CTRL_MASK));
-        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
-                InputEvent.CTRL_MASK));
+		// File menu initialization
+		try {
+			Reader reader = new InputStreamReader(getClass()
+					.getResourceAsStream("/icon"));
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this,
+					"Can't read image from the disk", "error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		// Show the icons for the sub-buttons of File menu
+		nf = new ImageIcon(getClass().getResource("/icon/newfile.jpg"));
+		sf = new ImageIcon(getClass().getResource("/icon/savefile.jpg"));
+		of = new ImageIcon(getClass().getResource("/icon/openfile.jpg"));
+		ex = new ImageIcon(getClass().getResource("/icon/exit.jpg"));
+		newfile = new JMenuItem("new", nf);
+		openfile = new JMenuItem("open", of);
+		savefile = new JMenuItem("save", sf);
+		exit = new JMenuItem("exit", ex);
 
-        newfile.addActionListener(this);
-        openfile.addActionListener(this);
-        savefile.addActionListener(this);
-        exit.addActionListener(this);
+		file.add(newfile);
+		file.add(openfile);
+		file.add(savefile);
+		file.add(exit);
 
-        // Initialization of the color palate
-        colorchoice = new JMenuItem("color palete");
-        colorchoice.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
-                InputEvent.CTRL_MASK));
-        colorchoice.addActionListener(this);
-        color.add(colorchoice);
-        // Initialization of the Help menu
-        helpmain = new JMenuItem("User document");
-        helpin = new JMenuItem("About this program");
+		// Add short cut keys for the buttons
+		newfile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
+				InputEvent.CTRL_MASK));
+		openfile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
+				InputEvent.CTRL_MASK));
+		savefile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+				InputEvent.CTRL_MASK));
+		exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+				InputEvent.CTRL_MASK));
 
-        // Add function to the help menu
-        help.add(helpmain);
-        help.addSeparator(); // Set a line between sub-menu
-        help.add(helpin);
-        helpin.addActionListener(this);
-        helpmain.addActionListener(this);
+		newfile.addActionListener(this);
+		openfile.addActionListener(this);
+		savefile.addActionListener(this);
+		exit.addActionListener(this);
 
-        // Initialization for stroke menu
-        strokeitem = new JMenuItem("set brush");
-        strokeitem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
-                InputEvent.CTRL_MASK));
-        stroke.add(strokeitem);
-        strokeitem.addActionListener(this);
+		// Initialization of the color palate
+		colorchoice = new JMenuItem("color palete");
+		colorchoice.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
+				InputEvent.CTRL_MASK));
+		colorchoice.addActionListener(this);
+		color.add(colorchoice);
+		// Initialization of the Help menu
+		helpmain = new JMenuItem("User document");
+		helpin = new JMenuItem("About this program");
 
-        // Initialization for the toolbar
-        buttonpanel = new JToolBar(JToolBar.HORIZONTAL);
-        icons = new ImageIcon[names.length];
-        button = new JButton[names.length];
-        for (int i = 0; i < names.length; i++) {
-            // read icons for the button to the buffer
-            icons[i] = new ImageIcon(getClass().getResource(
-                    "/icon/" + names[i] + ".jpg"));
-            // Create the buttons
-            button[i] = new JButton("", icons[i]);
-            // Show instructions when the mouse moves over the icon
-            button[i].setToolTipText(tiptext[i]);
-            buttonpanel.add(button[i]);
-            button[i].setBackground(Color.white);
-            if (i < 3) {
-                button[i].addActionListener(this);
-            } else if (i <= 16) {
-                button[i].addActionListener(this);
-            }
+		// Add function to the help menu
+		help.add(helpmain);
+		help.addSeparator(); // Set a line between sub-menu
+		help.add(helpin);
+		helpin.addActionListener(this);
+		helpmain.addActionListener(this);
 
-        }
-        // Handles the styles of the characters
-        CheckBoxHandler CHandler = new CheckBoxHandler();
-        bold = new JCheckBox("bold");
-        bold.setFont(new Font(Font.DIALOG, Font.BOLD, 30));
-        // Set font for the character "bold"
-        bold.addItemListener(CHandler);
-        italic = new JCheckBox("italic");
-        italic.addItemListener(CHandler);
-        // Set font for the character "italic"
-        italic.setFont(new Font(Font.DIALOG, Font.ITALIC, 30));
-        GraphicsEnvironment ge = GraphicsEnvironment
-                .getLocalGraphicsEnvironment();
-        // Get available fonts from the computer
-        fontName = ge.getAvailableFontFamilyNames();
-        stytles = new JComboBox(fontName); // Initialization for the font lists
-        stytles.addItemListener(CHandler);
-        stytles.setMaximumSize(new Dimension(400, 50));
-        stytles.setMinimumSize(new Dimension(250, 40));
-        stytles.setFont(new Font(Font.DIALOG, Font.BOLD, 20));
-        // Set font for the lists
+		// Initialization for stroke menu
+		strokeitem = new JMenuItem("set brush");
+		strokeitem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
+				InputEvent.CTRL_MASK));
+		stroke.add(strokeitem);
+		strokeitem.addActionListener(this);
 
-        buttonpanel.add(bold);
-        buttonpanel.add(italic);
-        buttonpanel.add(stytles);
+		// Initialization for the toolbar
+		buttonpanel = new JToolBar(JToolBar.HORIZONTAL);
+		icons = new ImageIcon[names.length];
+		button = new JButton[names.length];
+		for (int i = 0; i < names.length; i++) {
+			// read icons for the button to the buffer
+			icons[i] = new ImageIcon(getClass().getResource(
+					"/icon/" + names[i] + ".jpg"));
+			// Create the buttons
+			button[i] = new JButton("", icons[i]);
+			// Show instructions when the mouse moves over the icon
+			button[i].setToolTipText(tiptext[i]);
+			buttonpanel.add(button[i]);
+			button[i].setBackground(Color.white);
+			if (i < 3) {
+				button[i].addActionListener(this);
+			} else if (i <= 16) {
+				button[i].addActionListener(this);
+			}
 
-        // Initialization for the start bar
-        startbar = new JLabel("White Board");
+		}
+		// Handles the styles of the characters
+		CheckBoxHandler CHandler = new CheckBoxHandler();
+		bold = new JCheckBox("bold");
+		bold.setFont(new Font(Font.DIALOG, Font.BOLD, 30));
+		// Set font for the character "bold"
+		bold.addItemListener(CHandler);
+		italic = new JCheckBox("italic");
+		italic.addItemListener(CHandler);
+		// Set font for the character "italic"
+		italic.setFont(new Font(Font.DIALOG, Font.ITALIC, 30));
+		GraphicsEnvironment ge = GraphicsEnvironment
+				.getLocalGraphicsEnvironment();
+		// Get available fonts from the computer
+		fontName = ge.getAvailableFontFamilyNames();
+		stytles = new JComboBox(fontName); // Initialization for the font lists
+		stytles.addItemListener(CHandler);
+		stytles.setMaximumSize(new Dimension(400, 50));
+		stytles.setMinimumSize(new Dimension(250, 40));
+		stytles.setFont(new Font(Font.DIALOG, Font.BOLD, 20));
+		// Set font for the lists
 
-        userinfo = new JPanel();
-        userinfo.setLayout( new BorderLayout());
-        userinfo.setPreferredSize(new Dimension(200, 10));
-        
+		buttonpanel.add(bold);
+		buttonpanel.add(italic);
+		buttonpanel.add(stytles);
 
-        
+		// Initialization for the start bar
+		startbar = new JLabel("White Board");
 
-        chat = new JPanel();
-        chat.setLayout(new BorderLayout(0,10));
-        chat.setPreferredSize(new Dimension(400, 900));
-        chat.add(recvWindow(), BorderLayout.NORTH);
-        chat.add(sendWindow(), BorderLayout.CENTER);
-        chat.add(buttons(),BorderLayout.SOUTH);
-        
-        
-        // Initialization for the canvas
-        drawarea = new DrawArea(this);
-        helpobject = new Help(this);
-        fileclass = new FileHandler(this, drawarea);
-        
-        Container con = getContentPane(); // Get the canvas implemented
-        con.setLayout(new BorderLayout());
-        con.add(buttonpanel, BorderLayout.NORTH);
-        con.add(drawarea, BorderLayout.CENTER);
-        con.add(startbar, BorderLayout.SOUTH);
-        con.add(userinfo, BorderLayout.WEST);
-        con.add(chat, BorderLayout.EAST);
+		userinfo = new JPanel();
+		userinfo.setLayout(new BorderLayout());
+		userinfo.setPreferredSize(new Dimension(200, 10));
 
-        setBounds(0, 0, dim.width, dim.height - 40);
-        setVisible(true);
-        validate();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
+		chat = new JPanel();
+		chat.setLayout(new BorderLayout(0, 10));
+		chat.setPreferredSize(new Dimension(400, 900));
+		chat.add(recvWindow(), BorderLayout.NORTH);
+		chat.add(sendWindow(), BorderLayout.CENTER);
+		chat.add(buttons(), BorderLayout.SOUTH);
 
-    // The characters shown in the start bar
-    public void setStratBar(String s) {
-        startbar.setText(s);
-    }
+		// Initialization for the canvas
+		drawarea = new DrawArea(this);
+		helpobject = new Help(this);
+		fileclass = new FileHandler(this, drawarea);
 
-    
-    public JPanel recvWindow(){
-    	recvArea = new JTextArea(400,(dim.height-130)*2/3 - 50);
+		Container con = getContentPane(); // Get the canvas implemented
+		con.setLayout(new BorderLayout());
+		con.add(buttonpanel, BorderLayout.NORTH);
+		con.add(drawarea, BorderLayout.CENTER);
+		con.add(startbar, BorderLayout.SOUTH);
+		con.add(userinfo, BorderLayout.WEST);
+		con.add(chat, BorderLayout.EAST);
 
-        chatRoom = new JLabel("                                                   The Chat Room");
-        chatRoomPanel = new JPanel();
-        chatRoomPanel.setLayout( new BorderLayout());
-        chatRoomPanel.add(chatRoom, BorderLayout.CENTER);
-        
-        recvAll = new JPanel();
-        recviveScroll = new JScrollPane(recvArea);
+		setBounds(0, 0, dim.width, dim.height - 40);
+		setVisible(true);
+		validate();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
 
-        recviveScroll.setVerticalScrollBarPolicy( 
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
-        recvArea.setEditable(false);
-        recvArea.setLineWrap(true); 
-        recvAll.add(recviveScroll);
-        
-        recviveAreaPanel = new JPanel();
-        recviveAreaPanel.setLayout( new BorderLayout());
-        recviveAreaPanel.add(chatRoomPanel, BorderLayout.NORTH);
-        recviveAreaPanel.add(recvAll,BorderLayout.CENTER);
-        //recviveAreaPanel.setSize(400,(dim.height-130)*2/3 - 50);
-        recviveAreaPanel.setPreferredSize(new Dimension(400,(dim.height-130)*2/3 - 50));
-        recviveAreaPanel.setBorder(BorderFactory.createLineBorder(Color.blue));
-        return recviveAreaPanel;
-    }
-    
-    public JPanel sendWindow(){
-        sendArea = new JTextArea(400,(dim.height-130)/3 - 50);
-        sendAreaPanel = new JPanel();
-        sendScroll = new JScrollPane(sendArea);
+	// The characters shown in the start bar
+	public void setStratBar(String s) {
+		startbar.setText(s);
+	}
 
-        sendScroll.setVerticalScrollBarPolicy( 
-                        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
-        sendArea.setLineWrap(true); 
-        sendAreaPanel.setLayout(new BorderLayout());
-        
-        sendAreaPanel.add(sendArea,BorderLayout.CENTER);
-        sendAreaPanel.setSize(400,(dim.height-130)/3 - 50);
-        sendAreaPanel.setBorder(BorderFactory.createLineBorder(Color.blue));
-        return sendAreaPanel;
-    }
-    
-    public JPanel buttons(){
-        clear = new JButton("Clear");
-        send = new JButton("Send");
-        
-        clear.addActionListener(this);
-        clear.setActionCommand("clear");
-        send.addActionListener(this);
-        send.setActionCommand("send");
-        
-        sendButtonPanel = new JPanel();
-        sendButtonPanel.add(clear);
-        sendButtonPanel.add(send);
-        sendButtonAreaPanel = new JPanel();
-        sendButtonAreaPanel.add(sendButtonPanel,BorderLayout.EAST);
-        return sendButtonAreaPanel;
-    }
-    
-    
-    public String usermessage(String username, String ip_address){
-    	String userName = username;
-    	String ipAddress = ip_address;
-    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    	String time = df.format(new Date());
-    	String content = sendArea.getText();
-    	String userMessage = userName + ("(") + ipAddress + (")") + (" ") + time +("\n") + content;
-    	return userMessage;
-    }
-    /*
-      The functions of the button
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
+	public JPanel recvWindow() {
+		recvArea = new JTextArea(400, (dim.height - 130) * 2 / 3 - 50);
 
-        for (int i = 3; i <= 13; i++) {
-            if (e.getSource() == button[i]) {
-                drawarea.setCurrentShapeType(DrawArea.ShapeType.values()[i-3]);
-                drawarea.repaint();
-            }
+		chatRoom = new JLabel(
+				"                                                   The Chat Room");
+		chatRoomPanel = new JPanel();
+		chatRoomPanel.setLayout(new BorderLayout());
+		chatRoomPanel.add(chatRoom, BorderLayout.CENTER);
 
-        }
-        if (e.getSource() == newfile || e.getSource() == button[0]){
-            // new file
-            fileclass.newFile();
-        } else if (e.getSource() == openfile || e.getSource() == button[1]){
-            // open file
-            fileclass.openFile();
-        } else if (e.getSource() == savefile || e.getSource() == button[2]){
-            // save file
-            fileclass.saveFile();
-        } else if (e.getSource() == exit){
-            // exit
-            System.exit(0);
-        } else if (e.getSource() == button[14]){
-            // color plate
-            drawarea.chooseColor();// Choose your color
-        } else if (e.getSource() == button[15] || e.getSource() == strokeitem){
-            // Brush size
-            drawarea.setStroke();
-        } else if (e.getSource() == button[16]){
-            // add text
-            JOptionPane.showMessageDialog(null,
-                    "please click on canvs to confirm position of textinput",
-                    "hints", JOptionPane.INFORMATION_MESSAGE);
-            drawarea.setCurrentShapeType(DrawArea.ShapeType.WORD);
-            drawarea.repaint();
-        } else if (e.getSource() == helpin){
-            // Help info
-            helpobject.AboutBook();
-        } else if (e.getSource() == helpmain){
-            // About this program
-            helpobject.MainHeip();
-        }
-        else if(e.getActionCommand().equals("clear")){
-        	sendArea.setText("");
-        }
-        else if(e.getActionCommand().equals("send")){
-        	recvArea.append(usermessage("Admin", "120.0.0.7") + "\n");
-        	System.out.println(usermessage("Admin", "120.0.0.7"));
-        	sendArea.setText("");
-        }
+		recviveScroll = new JScrollPane(recvArea);
 
-    }
+		recviveScroll
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		recvArea.setEditable(false);
+		recvArea.setLineWrap(true);
 
-    // About the font of the character
-    public class CheckBoxHandler implements ItemListener {
+		recviveAreaPanel = new JPanel();
+		recviveAreaPanel.setLayout(new BorderLayout());
+		recviveAreaPanel.add(chatRoomPanel, BorderLayout.NORTH);
+		recviveAreaPanel.add(recvArea, BorderLayout.CENTER);
+		// recviveAreaPanel.setSize(400,(dim.height-130)*2/3 - 50);
+		recviveAreaPanel.setPreferredSize(new Dimension(400,
+				(dim.height - 130) * 2 / 3 - 50));
+		recviveAreaPanel.setBorder(BorderFactory.createLineBorder(Color.blue));
+		return recviveAreaPanel;
+	}
 
-        public void itemStateChanged(ItemEvent ie) {
-            // TODO the font of the character
-            if (ie.getSource() == bold) // Bold font
-            {
-                if (ie.getStateChange() == ItemEvent.SELECTED)
-                    drawarea.setFont(1, Font.BOLD);
-                else
-                    drawarea.setFont(1, Font.PLAIN);
-            } else if (ie.getSource() == italic) // Italic font
-            {
-                if (ie.getStateChange() == ItemEvent.SELECTED)
-                    drawarea.setFont(2, Font.ITALIC);
-                else
-                    drawarea.setFont(2, Font.PLAIN);
+	public JPanel sendWindow() {
+		sendArea = new JTextArea(400, (dim.height - 130) / 3 - 50);
+		sendAreaPanel = new JPanel();
+		sendScroll = new JScrollPane(sendArea);
 
-            } else if (ie.getSource() == stytles) // System font
-            {
-                drawarea.setStytle(fontName[stytles.getSelectedIndex()]);
-            }
-        }
+		sendScroll
+				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		sendArea.setLineWrap(true);
+		sendAreaPanel.setLayout(new BorderLayout());
 
-    }
+		sendAreaPanel.add(sendArea, BorderLayout.NORTH);
+		sendAreaPanel.setSize(400, (dim.height - 130) / 3 - 50);
+		sendAreaPanel.setBorder(BorderFactory.createLineBorder(Color.blue));
+		return sendAreaPanel;
+	}
+
+	public JPanel buttons() {
+		clear = new JButton("Clear");
+		send = new JButton("Send");
+
+		clear.addActionListener(this);
+		clear.setActionCommand("clear");
+		send.addActionListener(this);
+		send.setActionCommand("send");
+
+		sendButtonPanel = new JPanel();
+		sendButtonPanel.add(clear);
+		sendButtonPanel.add(send);
+		sendButtonAreaPanel = new JPanel();
+		sendButtonAreaPanel.add(sendButtonPanel, BorderLayout.EAST);
+		return sendButtonAreaPanel;
+	}
+
+	public String usermessage(String username, String ip_address) {
+		String userName = username;
+		String ipAddress = ip_address;
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time = df.format(new Date());
+		String content = sendArea.getText();
+		String userMessage = userName + ("(") + ipAddress + (")") + ("  ")
+				+ time + ("\n") + content;
+		return userMessage;
+	}
+
+	/*
+	 * The functions of the button
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		for (int i = 3; i <= 13; i++) {
+			if (e.getSource() == button[i]) {
+				drawarea.setCurrentShapeType(DrawArea.ShapeType.values()[i - 3]);
+				drawarea.repaint();
+			}
+
+		}
+		if (e.getSource() == newfile || e.getSource() == button[0]) {
+			// new file
+			fileclass.newFile();
+		} else if (e.getSource() == openfile || e.getSource() == button[1]) {
+			// open file
+			fileclass.openFile();
+		} else if (e.getSource() == savefile || e.getSource() == button[2]) {
+			// save file
+			fileclass.saveFile();
+		} else if (e.getSource() == exit) {
+			// exit
+			System.exit(0);
+		} else if (e.getSource() == button[14]) {
+			// color plate
+			drawarea.chooseColor();// Choose your color
+		} else if (e.getSource() == button[15] || e.getSource() == strokeitem) {
+			// Brush size
+			drawarea.setStroke();
+		} else if (e.getSource() == button[16]) {
+			// add text
+			JOptionPane.showMessageDialog(null,
+					"please click on canvs to confirm position of textinput",
+					"hints", JOptionPane.INFORMATION_MESSAGE);
+			drawarea.setCurrentShapeType(DrawArea.ShapeType.WORD);
+			drawarea.repaint();
+		} else if (e.getSource() == helpin) {
+			// Help info
+			helpobject.AboutBook();
+		} else if (e.getSource() == helpmain) {
+			// About this program
+			helpobject.MainHeip();
+		} else if (e.getActionCommand().equals("clear")) {
+			sendArea.setText("");
+		} else if (e.getActionCommand().equals("send")) {
+			recvArea.append(usermessage("Admin", "120.0.0.7") + "\n");
+			// System.out.println(usermessage("Admin", "120.0.0.7"));
+			sendArea.setText("");
+		}
+
+	}
+
+	// About the font of the character
+	public class CheckBoxHandler implements ItemListener {
+
+		public void itemStateChanged(ItemEvent ie) {
+			// TODO the font of the character
+			if (ie.getSource() == bold) // Bold font
+			{
+				if (ie.getStateChange() == ItemEvent.SELECTED)
+					drawarea.setFont(1, Font.BOLD);
+				else
+					drawarea.setFont(1, Font.PLAIN);
+			} else if (ie.getSource() == italic) // Italic font
+			{
+				if (ie.getStateChange() == ItemEvent.SELECTED)
+					drawarea.setFont(2, Font.ITALIC);
+				else
+					drawarea.setFont(2, Font.PLAIN);
+
+			} else if (ie.getSource() == stytles) // System font
+			{
+				drawarea.setStytle(fontName[stytles.getSelectedIndex()]);
+			}
+		}
+
+	}
 }
