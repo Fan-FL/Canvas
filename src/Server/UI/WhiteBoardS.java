@@ -13,7 +13,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 // Draw the main frame of the white board
-public class WhiteBoardS extends JFrame implements ActionListener {
+public class WhiteBoardS extends WhiteBoard implements ActionListener {
 
 	private static final long serialVersionUID = -2551980583852173918L;
 	private JToolBar buttonpanel;
@@ -44,7 +44,7 @@ public class WhiteBoardS extends JFrame implements ActionListener {
 	// Define the name of the icons in the button panel
 	private String names[] = { "newfile", "openfile", "savefile", "pen",
 			"line", "rect", "frect", "oval", "foval", "circle", "fcircle",
-			"roundrect", "froundrect", "rubber", "color", "stroke", "word" };
+			"roundrect", "froundrect", "rubber", "color", "stroke", "word", "undo" };
 	private Icon icons[];
 
 	// Show instruction when the mouse moves above the button
@@ -54,7 +54,7 @@ public class WhiteBoardS extends JFrame implements ActionListener {
 			"draw a hollow oval", "draw a solid oval", "draw a hollow circle",
 			"draw a solid circle", "draw a rounded corner rectangle",
 			"draw a solid rounded corner rectangle", "eraser", "color",
-			"brush size", "text input" };
+			"brush size", "text input", "undo process" };
 	JButton button[]; // define button group in toolbar
 	private JCheckBox bold, italic;
 
