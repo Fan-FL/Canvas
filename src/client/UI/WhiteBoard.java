@@ -12,43 +12,43 @@ import javax.swing.*;
 // Draw the main frame of the white board
 public class WhiteBoard extends JFrame implements ActionListener {
 
-    private static final long serialVersionUID = -2551980583852173918L;
-    private JToolBar buttonpanel;
+    public static final long serialVersionUID = -2551980583852173918L;
+    public JToolBar buttonpanel;
     // define the button panel
-    private JMenuBar bar;
-    private JMenu file, color, stroke, help;
+    public JMenuBar bar;
+    public JMenu file, color, stroke, help;
     // four main menu of the button panel
-    private JMenuItem newfile, openfile, savefile, exit;
-    private JMenuItem helpin, helpmain, colorchoice, strokeitem;
-    private Icon nf, sf, of, ex;
+    public JMenuItem newfile, openfile, savefile, exit,undoIt;
+    public JMenuItem helpin, helpmain, colorchoice, strokeitem;
+    public Icon nf, sf, of, ex,undo;
     // The icon objects of the button panel
-    private JLabel startbar;
-    private DrawArea drawarea;
-    private Help helpobject;
-    private FileHandler fileclass;
+    public JLabel startbar;
+    public DrawArea drawarea;
+    public Help helpobject;
+    public FileHandler fileclass;
 
-    private JPanel userinfo;
-    private JScrollPane chat;
+    public JPanel userinfo;
+    public JScrollPane chat;
 
     String[] fontName;
     // Define the name of the icons in the button panel
-    private String names[] = {"newfile", "openfile", "savefile", "pen",
+    public String names[] = {"newfile", "openfile", "savefile", "pen",
             "line", "rect", "frect", "oval", "foval", "circle", "fcircle",
-            "roundrect", "froundrect", "rubber", "color", "stroke", "word"};
-    private Icon icons[];
+            "roundrect", "froundrect", "rubber", "color", "stroke", "word","undo"};
+    public Icon icons[];
 
     // Show instruction when the mouse moves above the button
-    private String tiptext[] = {"create a picture", "open a picture",
+    public String tiptext[] = {"create a picture", "open a picture",
             "save the picture", "freely draw", "draw a straight line",
             "draw a hollow rectangle", "draw a solid rectangle",
             "draw a hollow oval", "draw a solid oval", "draw a hollow circle",
             "draw a solid circle", "draw a rounded corner rectangle",
             "draw a solid rounded corner rectangle", "eraser", "color",
-            "brush size", "text input"};
+            "brush size", "text input","undo process"};
     JButton button[]; // define button group in toolbar
-    private JCheckBox bold, italic;
+    public JCheckBox bold, italic;
 
-    private JComboBox stytles;
+    public JComboBox stytles;
 
     public WhiteBoard(String string) {
         // TODO constructor of main interface
@@ -87,15 +87,19 @@ public class WhiteBoard extends JFrame implements ActionListener {
         sf = new ImageIcon(getClass().getResource("/icon/savefile.jpg"));
         of = new ImageIcon(getClass().getResource("/icon/openfile.jpg"));
         ex = new ImageIcon(getClass().getResource("/icon/exit.jpg"));
+        undo = new ImageIcon(getClass().getResource("/icon/undo.jpg"));
         newfile = new JMenuItem("new", nf);
         openfile = new JMenuItem("open", of);
         savefile = new JMenuItem("save", sf);
         exit = new JMenuItem("exit", ex);
+        undoIt = new JMenuItem("undo", undo);
 
         file.add(newfile);
         file.add(openfile);
         file.add(savefile);
         file.add(exit);
+        file.add(undoIt);
+
 
         // Add short cut keys for the buttons
         newfile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
@@ -106,11 +110,14 @@ public class WhiteBoard extends JFrame implements ActionListener {
                 InputEvent.CTRL_MASK));
         exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
                 InputEvent.CTRL_MASK));
+        undoIt.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+                InputEvent.CTRL_MASK));
 
         newfile.addActionListener(this);
         openfile.addActionListener(this);
         savefile.addActionListener(this);
         exit.addActionListener(this);
+        undoIt.addActionListener(this);
 
         // Initialization of the color palate
         colorchoice = new JMenuItem("color palete");
@@ -197,29 +204,33 @@ public class WhiteBoard extends JFrame implements ActionListener {
         // chat.add( createRecvArea(),BorderLayout.NORTH);
         // chat.add( createSendArea(),BorderLayout.CENTER);
         // chat.add( createSendButtonArea(),BorderLayout.SOUTH);
-        setVisible(true);
         validate();
 
         // Initialization for the canvas
         drawarea = new DrawArea(this);
         helpobject = new Help(this);
         fileclass = new FileHandler(this, drawarea);
-        setVisible(true);
+        
+        JPanel jp = new JPanel(new GridLayout(1,1));
         validate();
 
         Container con = getContentPane(); // Get the canvas implemented
         con.add(buttonpanel, BorderLayout.NORTH);
-        con.add(drawarea, BorderLayout.CENTER);
+        startbar.setText("a"+"\n"+"a"+"\n"+"c12312312312312312312");
+        startbar.setBackground(new Color(0,0,0));
+        startbar.setSize(200, 1000);
+        jp.add(startbar);
         con.add(startbar, BorderLayout.SOUTH);
+        con.add(drawarea, BorderLayout.CENTER);
         con.add(userinfo, BorderLayout.WEST);
         con.add(chat, BorderLayout.EAST);
 
         Toolkit tool = getToolkit();
         Dimension dim = tool.getScreenSize();// Get the size of current screen
         setBounds(0, 0, dim.width, dim.height - 40);
-        setVisible(true);
         validate();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
     }
 
 	/*

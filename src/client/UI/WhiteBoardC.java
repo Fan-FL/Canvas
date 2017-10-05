@@ -10,7 +10,7 @@ import java.io.Reader;
 import javax.swing.*;
 
 // Draw the main frame of the white board
-public class WhiteBoardC extends JFrame implements ActionListener {
+public class WhiteBoardC extends WhiteBoard implements ActionListener {
 
     private static final long serialVersionUID = -2551980583852173918L;
     private JToolBar buttonpanel;
@@ -34,7 +34,7 @@ public class WhiteBoardC extends JFrame implements ActionListener {
     // Define the name of the icons in the button panel
     private String names[] = {"newfile", "openfile", "savefile", "pen",
             "line", "rect", "frect", "oval", "foval", "circle", "fcircle",
-            "roundrect", "froundrect", "rubber", "color", "stroke", "word"};
+            "roundrect", "froundrect", "rubber", "color", "stroke", "word", "undo"};
     private Icon icons[];
 
     // Show instruction when the mouse moves above the button
@@ -44,7 +44,7 @@ public class WhiteBoardC extends JFrame implements ActionListener {
             "draw a hollow oval", "draw a solid oval", "draw a hollow circle",
             "draw a solid circle", "draw a rounded corner rectangle",
             "draw a solid rounded corner rectangle", "eraser", "color",
-            "brush size", "text input"};
+            "brush size", "text input", "undo process"};
     JButton button[]; // define button group in toolbar
     private JCheckBox bold, italic;
 
@@ -197,19 +197,19 @@ public class WhiteBoardC extends JFrame implements ActionListener {
         // chat.add( createRecvArea(),BorderLayout.NORTH);
         // chat.add( createSendArea(),BorderLayout.CENTER);
         // chat.add( createSendButtonArea(),BorderLayout.SOUTH);
-        setVisible(true);
         validate();
 
         // Initialization for the canvas
         drawarea = new DrawArea(this);
         helpobject = new Help(this);
         fileclass = new FileHandler(this, drawarea);
-        setVisible(true);
         validate();
 
         Container con = getContentPane(); // Get the canvas implemented
         con.add(buttonpanel, BorderLayout.NORTH);
         con.add(drawarea, BorderLayout.CENTER);
+        startbar.setText("a"+"\n"+"a"+"\n"+"c看电视看了附近的索科洛夫就哭了的撒娇发卡拉撒开了大减肥看了就啊的发看了就撒的疯狂了就阿斯顿可否理解阿斯顿看了发就开始啦放假卡拉是的就卡拉是的就发看来是大家疯狂了大数据卡拉世界的卡拉的技术开发啥的");
+        startbar.setBackground(new Color(0,0,0));
         con.add(startbar, BorderLayout.SOUTH);
         con.add(userinfo, BorderLayout.WEST);
         con.add(chat, BorderLayout.EAST);
@@ -217,9 +217,9 @@ public class WhiteBoardC extends JFrame implements ActionListener {
         Toolkit tool = getToolkit();
         Dimension dim = tool.getScreenSize();// Get the size of current screen
         setBounds(0, 0, dim.width, dim.height - 40);
-        setVisible(true);
         validate();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
     }
 
 
