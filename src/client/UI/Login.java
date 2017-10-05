@@ -16,8 +16,8 @@ public class Login implements ActionListener{
     public void login_window(){
         int width = Toolkit.getDefaultToolkit().getScreenSize().width;
         int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-        int windowWidth = 440;
-        int windowHeight = 300;
+        int windowWidth = 512;
+        int windowHeight = 410;
         
         JPanel icon = new JPanel();
         JPanel text = new JPanel();
@@ -64,14 +64,15 @@ public class Login implements ActionListener{
         loginFrame.setLayout( new BorderLayout() );
         loginFrame.add(icon, BorderLayout.NORTH);
         loginFrame.add(text, BorderLayout.CENTER);
+        loginFrame.setResizable(false);
+        loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 
     }   
     
     public void actionPerformed(ActionEvent e) {  
         if(e.getActionCommand().equals("connect")){  
-            //System.out.println("点击了black");
         	@SuppressWarnings("unused")
-            WhiteBoard whiteBoard = new WhiteBoard("Mini-Canvas Client");
+            WhiteBoardC whiteBoard = new WhiteBoardC("Mini-Canvas Client");
         	loginFrame.dispose();
         	
         }  

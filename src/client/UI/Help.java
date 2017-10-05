@@ -4,9 +4,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Help extends JFrame {
-    private WhiteBoard whiteboard = null;
+    private WhiteBoardC whiteboard = null;
 
-    public Help(WhiteBoard wb) {
+    public Help(WhiteBoardC wb) {
         whiteboard = wb;
     }
 

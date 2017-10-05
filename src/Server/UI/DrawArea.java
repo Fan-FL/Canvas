@@ -1,7 +1,7 @@
 package Server.UI;
 
 import Server.Server;
-import Server.UI.WhiteBoard;
+import Server.UI.WhiteBoardS;
 import Server.shape.*;
 import Server.shape.Shape;
 
@@ -20,7 +20,7 @@ public class DrawArea extends JPanel {
         CIRCLE, FILLCIRCLE, ROUNDRECT, FILLROUNDRECT, RUBBER, WORD;
     }
 
-    private WhiteBoard whiteboard = null;
+    private WhiteBoardS whiteboard = null;
     public java.util.List<Shape> shapeList = new java.util.ArrayList<Shape>(); // drawing graphs
 
     private ShapeType currentShapeType = ShapeType.PENCIL; // Set default pen as Pencil
@@ -33,7 +33,7 @@ public class DrawArea extends JPanel {
     private String stytle; // Current character style
     private float stroke = 1.0f; // set brush size and initialize it as 1.0
 
-    public DrawArea(WhiteBoard wb) {
+    public DrawArea(WhiteBoardS wb) {
         whiteboard = wb;
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         // Set the cursor as a crossing
@@ -208,14 +208,14 @@ public class DrawArea extends JPanel {
         @Override
         public void mouseEntered(MouseEvent me) {
             // TODO mouse enter
-            whiteboard.setStratBar("Mouse enters in：[" + me.getX() + " ,"
+            whiteboard.setStratBar("Mouse enters in:[" + me.getX() + " ,"
                     + me.getY() + "]");
         }
 
         @Override
         public void mouseExited(MouseEvent me) {
             // TODO mouse exits
-            whiteboard.setStratBar("Mouse exits from：[" + me.getX() + " ,"
+            whiteboard.setStratBar("Mouse exits from:[" + me.getX() + " ,"
                     + me.getY() + "]");
         }
 
@@ -223,7 +223,7 @@ public class DrawArea extends JPanel {
         public void mousePressed(MouseEvent me) {
             // Create new graph object
             createNewShape();
-            whiteboard.setStratBar("Mouse clicked at：[" + me.getX() + " ,"
+            whiteboard.setStratBar("Mouse clicked at:[" + me.getX() + " ,"
                     + me.getY() + "]");
 
             switch (currentShapeType) {
@@ -250,7 +250,7 @@ public class DrawArea extends JPanel {
 
         @Override
         public void mouseReleased(MouseEvent me) {
-            whiteboard.setStratBar("Mouse loosen at：[" + me.getX() + " ,"
+            whiteboard.setStratBar("Mouse loosen at:[" + me.getX() + " ,"
                     + me.getY() + "]");
 
             switch (currentShapeType) {
@@ -301,7 +301,7 @@ public class DrawArea extends JPanel {
                     currentShape.x1 = me.getX();
                     currentShape.y1 = me.getY();
                     String input;
-                    input = JOptionPane.showInputDialog("Please enter your input！");
+                    input = JOptionPane.showInputDialog("Please enter your input:");
                     currentShape.s1 = input;
                     currentShape.x2 = f1;
                     currentShape.y2 = f2;
@@ -319,7 +319,7 @@ public class DrawArea extends JPanel {
     class MyMouseMotionAdapter extends MouseMotionAdapter {
         // Drag mouse operation
         public void mouseDragged(MouseEvent me){
-            whiteboard.setStratBar("Mouse dragged at：[" + me.getX() + " ,"
+            whiteboard.setStratBar("Mouse dragged at:[" + me.getX() + " ,"
                     + me.getY() + "]");
             switch (currentShapeType) {
                 case PENCIL:
@@ -377,7 +377,7 @@ public class DrawArea extends JPanel {
          */
         @Override
         public void mouseMoved(MouseEvent me) {
-            whiteboard.setStratBar("Mouse moves at：[" + me.getX() + " ,"
+            whiteboard.setStratBar("Mouse moves at:[" + me.getX() + " ,"
                     + me.getY() + "]");
         }
     }

@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import Server.Server;
-import client.UI.WhiteBoard;
+import client.UI.WhiteBoardC;
 
 //import Proj1.server.ServerThread;
 
@@ -19,8 +19,8 @@ public class Startserver implements ActionListener{
     public void startServer(){
         int width = Toolkit.getDefaultToolkit().getScreenSize().width;
         int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-        int windowWidth = 440;
-        int windowHeight = 300;
+        int windowWidth = 512;
+        int windowHeight = 375;
         
         JPanel icon = new JPanel();
         JPanel text = new JPanel();
@@ -60,12 +60,14 @@ public class Startserver implements ActionListener{
         startFrame.setLayout( new BorderLayout() );
         startFrame.add(icon, BorderLayout.NORTH);
         startFrame.add(text, BorderLayout.CENTER);
+        startFrame.setResizable(false);
+        startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
     }   
     
     public void actionPerformed(ActionEvent e) {  
         if(e.getActionCommand().equals("start")){  
-			WhiteBoard whiteBoard = new WhiteBoard("Mini-Canvas Client");
+			WhiteBoardS whiteBoard = new WhiteBoardS("Mini-Canvas Server");
         	startFrame.dispose();
         	
         }  
