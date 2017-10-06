@@ -13,7 +13,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 // Draw the main frame of the white board
-public class WhiteBoardS extends WhiteBoard implements ActionListener {
+public class WhiteBoardS extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = -2551980583852173918L;
 	private JToolBar buttonpanel;
@@ -204,7 +204,7 @@ public class WhiteBoardS extends WhiteBoard implements ActionListener {
 
 		chat = new JPanel();
 		chat.setLayout(new BorderLayout(0, 10));
-		chat.setPreferredSize(new Dimension(400, 900));
+		chat.setPreferredSize(new Dimension(400, dim.height - 130));
 		chat.add(recvWindow(), BorderLayout.NORTH);
 		chat.add(sendWindow(), BorderLayout.CENTER);
 		chat.add(buttons(), BorderLayout.SOUTH);
@@ -232,16 +232,18 @@ public class WhiteBoardS extends WhiteBoard implements ActionListener {
 	public void setStratBar(String s) {
 		startbar.setText(s);
 	}
-
+	/*
+	public JPanel userInfo(){
+		
+	}
+*/
 	public JPanel recvWindow() {
 		recvArea = new JTextArea(400, (dim.height - 130) * 2 / 3 - 50);
 
-		chatRoom = new JLabel(
-				"                                                   The Chat Room");
+		chatRoom = new JLabel("The Chat Room");
 		chatRoomPanel = new JPanel();
-		chatRoomPanel.setLayout(new BorderLayout());
-		chatRoomPanel.add(chatRoom, BorderLayout.CENTER);
-
+		chatRoomPanel.setLayout(new GridLayout());
+		chatRoomPanel.add(chatRoom);
 		recviveScroll = new JScrollPane(recvArea);
 
 		recviveScroll
@@ -351,7 +353,7 @@ public class WhiteBoardS extends WhiteBoard implements ActionListener {
 		} else if (e.getActionCommand().equals("clear")) {
 			sendArea.setText("");
 		} else if (e.getActionCommand().equals("send")) {
-			recvArea.append(usermessage("Admin", "120.0.0.7") + "\n");
+			recvArea.append(usermessage("Admin", "120.0.0.1") + "\n");
 			// System.out.println(usermessage("Admin", "120.0.0.7"));
 			sendArea.setText("");
 		}

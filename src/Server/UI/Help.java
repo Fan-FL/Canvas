@@ -3,9 +3,9 @@ package Server.UI;
 import javax.swing.*;
 
 public class Help extends JFrame {
-    private WhiteBoard whiteboard = null;
+    private WhiteBoardS whiteboard = null;
 
-    public Help(WhiteBoard wb) {
+    public Help(WhiteBoardS wb) {
         whiteboard = wb;
     }
 

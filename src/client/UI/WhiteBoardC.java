@@ -6,11 +6,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.*;
 
 // Draw the main frame of the white board
-public class WhiteBoardC extends WhiteBoard implements ActionListener {
+public class WhiteBoardC extends JFrame implements ActionListener {
 
     private static final long serialVersionUID = -2551980583852173918L;
     private JToolBar buttonpanel;
@@ -27,8 +29,15 @@ public class WhiteBoardC extends WhiteBoard implements ActionListener {
     private Help helpobject;
     private FileHandler fileclass;
 
-    private JPanel userinfo;
-    private JScrollPane chat;
+	private JPanel userinfo;
+	private JPanel chat;
+
+	private JTextArea recvArea, sendArea;
+	private JPanel chatRoomPanel, recviveAreaPanel, sendAreaPanel,
+			sendButtonPanel, sendButtonAreaPanel;
+	private JLabel chatRoom;
+	private JButton clear, send;
+	private JScrollPane recviveScroll, sendScroll;
 
     String[] fontName;
     // Define the name of the icons in the button panel
@@ -49,6 +58,9 @@ public class WhiteBoardC extends WhiteBoard implements ActionListener {
     private JCheckBox bold, italic;
 
     private JComboBox stytles;
+    
+    Toolkit tool = getToolkit();
+    Dimension dim = tool.getScreenSize();// Get the size of current screen
 
     public WhiteBoardC(String string) {
         // TODO constructor of main interface
@@ -185,19 +197,16 @@ public class WhiteBoardC extends WhiteBoard implements ActionListener {
         // Initialization for the start bar
         startbar = new JLabel("White Board");
 
-        userinfo = new JPanel();
-        userinfo.setPreferredSize(new Dimension(200, 10));
-        setVisible(true);
-        validate();
+		userinfo = new JPanel();
+		userinfo.setLayout(new BorderLayout());
+		userinfo.setPreferredSize(new Dimension(200, 10));
 
-        chat = new JScrollPane();
-        // chat.add(new Label("Message",Label.CENTER));
-        chat.setPreferredSize(new Dimension(400, 10));
-        // chat.setLayout( new BorderLayout() );
-        // chat.add( createRecvArea(),BorderLayout.NORTH);
-        // chat.add( createSendArea(),BorderLayout.CENTER);
-        // chat.add( createSendButtonArea(),BorderLayout.SOUTH);
-        validate();
+		chat = new JPanel();
+		chat.setLayout(new BorderLayout(0, 10));
+		chat.setPreferredSize(new Dimension(400, dim.height - 130));
+		chat.add(recvWindow(), BorderLayout.NORTH);
+		chat.add(sendWindow(), BorderLayout.CENTER);
+		chat.add(buttons(), BorderLayout.SOUTH);
 
         // Initialization for the canvas
         drawarea = new DrawArea(this);
@@ -208,20 +217,89 @@ public class WhiteBoardC extends WhiteBoard implements ActionListener {
         Container con = getContentPane(); // Get the canvas implemented
         con.add(buttonpanel, BorderLayout.NORTH);
         con.add(drawarea, BorderLayout.CENTER);
-        startbar.setText("a"+"\n"+"a"+"\n"+"c¿´µçÊÓ¿´ÁË¸½½üµÄË÷¿ÆÂå·ò¾Í¿ÞÁËµÄÈö½¿·¢¿¨À­Èö¿ªÁË´ó¼õ·Ê¿´ÁË¾Í°¡µÄ·¢¿´ÁË¾ÍÈöµÄ·è¿ñÁË¾Í°¢Ë¹¶Ù¿É·ñÀí½â°¢Ë¹¶Ù¿´ÁË·¢¾Í¿ªÊ¼À²·Å¼Ù¿¨À­ÊÇµÄ¾Í¿¨À­ÊÇµÄ¾Í·¢¿´À´ÊÇ´ó¼Ò·è¿ñÁË´óÊý¾Ý¿¨À­ÊÀ½çµÄ¿¨À­µÄ¼¼Êõ¿ª·¢É¶µÄ");
+        startbar.setText("a"+"\n"+"a"+"\n"+"cï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½Ë¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë´ï¿½ï¿½ï¿½Ê¿ï¿½ï¿½Ë¾Í°ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½Ë¾Í°ï¿½Ë¹ï¿½Ù¿É·ï¿½ï¿½ï¿½â°¢Ë¹ï¿½Ù¿ï¿½ï¿½Ë·ï¿½ï¿½Í¿ï¿½Ê¼ï¿½ï¿½ï¿½Å¼Ù¿ï¿½ï¿½ï¿½ï¿½ÇµÄ¾Í¿ï¿½ï¿½ï¿½ï¿½ÇµÄ¾Í·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½Ò·ï¿½ï¿½ï¿½Ë´ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¶ï¿½ï¿½");
         startbar.setBackground(new Color(0,0,0));
         con.add(startbar, BorderLayout.SOUTH);
         con.add(userinfo, BorderLayout.WEST);
         con.add(chat, BorderLayout.EAST);
 
-        Toolkit tool = getToolkit();
-        Dimension dim = tool.getScreenSize();// Get the size of current screen
+
         setBounds(0, 0, dim.width, dim.height - 40);
         validate();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
 
+    
+
+ 	public JPanel recvWindow() {
+ 		recvArea = new JTextArea(400, (dim.height - 130) * 2 / 3 - 50);
+
+ 		chatRoom = new JLabel("The Chat Room");
+ 		chatRoomPanel = new JPanel();
+ 		chatRoomPanel.setLayout(new GridLayout());
+ 		chatRoomPanel.add(chatRoom);
+ 		recviveScroll = new JScrollPane(recvArea);
+
+ 		recviveScroll
+ 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+ 		recvArea.setEditable(false);
+ 		recvArea.setLineWrap(true);
+
+ 		recviveAreaPanel = new JPanel();
+ 		recviveAreaPanel.setLayout(new BorderLayout());
+ 		recviveAreaPanel.add(chatRoomPanel, BorderLayout.NORTH);
+ 		recviveAreaPanel.add(recvArea, BorderLayout.CENTER);
+ 		// recviveAreaPanel.setSize(400,(dim.height-130)*2/3 - 50);
+ 		recviveAreaPanel.setPreferredSize(new Dimension(400,
+ 				(dim.height - 130) * 2 / 3 - 50));
+ 		recviveAreaPanel.setBorder(BorderFactory.createLineBorder(Color.blue));
+ 		return recviveAreaPanel;
+ 	}
+
+ 	public JPanel sendWindow() {
+ 		sendArea = new JTextArea(400, (dim.height - 130) / 3 - 50);
+ 		sendAreaPanel = new JPanel();
+ 		sendScroll = new JScrollPane(sendArea);
+
+ 		sendScroll
+ 				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+ 		sendArea.setLineWrap(true);
+ 		sendAreaPanel.setLayout(new BorderLayout());
+
+ 		sendAreaPanel.add(sendArea, BorderLayout.NORTH);
+ 		sendAreaPanel.setSize(400, (dim.height - 130) / 3 - 50);
+ 		sendAreaPanel.setBorder(BorderFactory.createLineBorder(Color.blue));
+ 		return sendAreaPanel;
+ 	}
+
+ 	public JPanel buttons() {
+ 		clear = new JButton("Clear");
+ 		send = new JButton("Send");
+
+ 		clear.addActionListener(this);
+ 		clear.setActionCommand("clear");
+ 		send.addActionListener(this);
+ 		send.setActionCommand("send");
+
+ 		sendButtonPanel = new JPanel();
+ 		sendButtonPanel.add(clear);
+ 		sendButtonPanel.add(send);
+ 		sendButtonAreaPanel = new JPanel();
+ 		sendButtonAreaPanel.add(sendButtonPanel, BorderLayout.EAST);
+ 		return sendButtonAreaPanel;
+ 	}
+
+ 	public String usermessage(String username, String ip_address) {
+ 		String userName = username;
+ 		String ipAddress = ip_address;
+ 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+ 		String time = df.format(new Date());
+ 		String content = sendArea.getText();
+ 		String userMessage = userName + ("(") + ipAddress + (")") + ("  ")
+ 				+ time + ("\n") + content;
+ 		return userMessage;
+ 	}
 
 
     // The characters shown in the start bar
@@ -274,6 +352,13 @@ public class WhiteBoardC extends WhiteBoard implements ActionListener {
             // About this program
             helpobject.MainHeip();
         }
+        else if (e.getActionCommand().equals("clear")) {
+			sendArea.setText("");
+		} else if (e.getActionCommand().equals("send")) {
+			recvArea.append(usermessage("Client", "120.0.0.1") + "\n");
+			// System.out.println(usermessage("Admin", "120.0.0.7"));
+			sendArea.setText("");
+		}
 
     }
 

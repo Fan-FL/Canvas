@@ -14,7 +14,7 @@ public class Client {
 				try {
 					Login window = new Login();
 					window.login_window();
-					window.loginFrame.setVisible(true);
+					//window.loginFrame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

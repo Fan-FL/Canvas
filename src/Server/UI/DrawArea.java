@@ -20,7 +20,7 @@ public class DrawArea extends JPanel {
         CIRCLE, FILLCIRCLE, ROUNDRECT, FILLROUNDRECT, RUBBER, WORD;
     }
 
-    private WhiteBoard whiteboard = null;
+    private WhiteBoardS whiteboard = null;
     public java.util.List<Shape> shapeList = new java.util.ArrayList<Shape>(); // drawing graphs
 
     private ShapeType currentShapeType = ShapeType.PENCIL; // Set default pen as Pencil
@@ -33,8 +33,8 @@ public class DrawArea extends JPanel {
     private String stytle; // Current character style
     private float stroke = 1.0f; // set brush size and initialize it as 1.0
 
-    public DrawArea(WhiteBoard wb) {
-        whiteboard = wb;
+    public DrawArea(WhiteBoardS whiteBoardS) {
+        whiteboard = whiteBoardS;
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         // Set the cursor as a crossing
         setBackground(Color.white); // Set the background as white

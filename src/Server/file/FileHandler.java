@@ -1,7 +1,6 @@
 package Server.file;
 
 import Server.UI.DrawArea;
-import Server.UI.WhiteBoard;
 import Server.UI.WhiteBoardS;
 import Server.shape.Shape;
 
@@ -11,10 +10,10 @@ import java.awt.*;
 import java.io.*;
 
 public class FileHandler {
-    private WhiteBoard whiteboard;
+    private WhiteBoardS whiteboard;
     DrawArea drawarea = null;
 
-    public FileHandler(WhiteBoard wb, DrawArea da) {
+    public FileHandler(WhiteBoardS wb, DrawArea da) {
         whiteboard = wb;
         drawarea = da;
     }

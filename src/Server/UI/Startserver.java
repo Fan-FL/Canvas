@@ -60,13 +60,14 @@ public class Startserver implements ActionListener{
         startFrame.setLayout( new BorderLayout() );
         startFrame.add(icon, BorderLayout.NORTH);
         startFrame.add(text, BorderLayout.CENTER);
-        startFrame.setResizable(false);
+        //startFrame.setResizable(false);
         startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
     }   
     
     public void actionPerformed(ActionEvent e) {  
         if(e.getActionCommand().equals("start")){  
+			@SuppressWarnings("unused")
 			WhiteBoardS whiteBoard = new WhiteBoardS("Mini-Canvas Server");
         	startFrame.dispose();
         	
