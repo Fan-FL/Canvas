@@ -1,7 +1,5 @@
 package Server.UI;
 
-import Server.Server;
-import Server.UI.WhiteBoardS;
 import Server.shape.*;
 import Server.shape.Shape;
 
@@ -20,7 +18,7 @@ public class DrawArea extends JPanel {
         CIRCLE, FILLCIRCLE, ROUNDRECT, FILLROUNDRECT, RUBBER, WORD;
     }
 
-    private WhiteBoardS whiteboard = null;
+    private WhiteBoardServer whiteboard = null;
     public java.util.List<Shape> shapeList = new java.util.ArrayList<Shape>(); // drawing graphs
 
     private ShapeType currentShapeType = ShapeType.PENCIL; // Set default pen as Pencil
@@ -33,8 +31,8 @@ public class DrawArea extends JPanel {
     private String stytle; // Current character style
     private float stroke = 1.0f; // set brush size and initialize it as 1.0
 
-    public DrawArea(WhiteBoardS whiteBoardS) {
-        whiteboard = whiteBoardS;
+    public DrawArea(WhiteBoardServer whiteBoardServer) {
+        whiteboard = whiteBoardServer;
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         // Set the cursor as a crossing
         setBackground(Color.white); // Set the background as white
@@ -90,8 +88,17 @@ public class DrawArea extends JPanel {
 
     public void addShape(Shape shape){
         this.shapeList.add(shape);
+        currentShape = null;
         repaint();
         System.out.println(shapeList.size());
+    }
+
+    public void undo() {
+        if(!shapeList.isEmpty()){
+            shapeList.remove(shapeList.size()-1);
+            currentShape = null;
+            repaint();
+        }
     }
 
     private void createNewShape() {

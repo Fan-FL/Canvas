@@ -2,12 +2,8 @@ package Server;
 
 
 import Server.UI.Startserver;
-import Server.UI.WhiteBoardS;
-import client.UI.Login;
 
 import java.awt.EventQueue;
-
-import javax.swing.JOptionPane;
 
 public class Server {
 	// The main class of this program

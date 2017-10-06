@@ -1,7 +1,7 @@
 package client.file;
 
 import client.UI.DrawArea;
-import client.UI.WhiteBoardC;
+import client.UI.WhiteBoardClient;
 import client.shape.Shape;
 
 import java.awt.Color;
@@ -11,10 +11,10 @@ import javax.swing.*;
 import javax.swing.filechooser.*;
 
 public class FileHandler {
-    private WhiteBoardC whiteboard;
+    private WhiteBoardClient whiteboard;
     DrawArea drawarea = null;
 
-    public FileHandler(WhiteBoardC wb, DrawArea da) {
+    public FileHandler(WhiteBoardClient wb, DrawArea da) {
         whiteboard = wb;
         drawarea = da;
     }

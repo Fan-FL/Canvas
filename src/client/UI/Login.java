@@ -72,7 +72,7 @@ public class Login implements ActionListener{
     public void actionPerformed(ActionEvent e) {  
         if(e.getActionCommand().equals("connect")){  
         	@SuppressWarnings("unused")
-            WhiteBoardC whiteBoard = new WhiteBoardC("Mini-Canvas Client");
+            WhiteBoardClient whiteBoard = new WhiteBoardClient("Mini-Canvas Client");
         	loginFrame.dispose();
         	
         }  

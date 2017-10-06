@@ -13,7 +13,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 // Draw the main frame of the white board
-public class WhiteBoardS extends JFrame implements ActionListener {
+public class WhiteBoardServer extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = -2551980583852173918L;
 	private JToolBar buttonpanel;
@@ -63,7 +63,7 @@ public class WhiteBoardS extends JFrame implements ActionListener {
 	Toolkit tool = getToolkit();
 	Dimension dim = tool.getScreenSize();// Get the size of current screen
 
-	public WhiteBoardS(String string) {
+	public WhiteBoardServer(String string) {
 		// TODO constructor of main interface
 		super(string);
 		// initial menu
@@ -165,7 +165,7 @@ public class WhiteBoardS extends JFrame implements ActionListener {
 			button[i].setBackground(Color.white);
 			if (i < 3) {
 				button[i].addActionListener(this);
-			} else if (i <= 16) {
+			} else if (i <= 17) {
 				button[i].addActionListener(this);
 			}
 
@@ -331,7 +331,7 @@ public class WhiteBoardS extends JFrame implements ActionListener {
 		} else if (e.getSource() == exit) {
 			// exit
 			System.exit(0);
-		} else if (e.getSource() == button[14]) {
+		} else if (e.getSource() == button[14] || e.getSource() == colorchoice) {
 			// color plate
 			drawarea.chooseColor();// Choose your color
 		} else if (e.getSource() == button[15] || e.getSource() == strokeitem) {
@@ -344,6 +344,8 @@ public class WhiteBoardS extends JFrame implements ActionListener {
 					"hints", JOptionPane.INFORMATION_MESSAGE);
 			drawarea.setCurrentShapeType(DrawArea.ShapeType.WORD);
 			drawarea.repaint();
+		} else if (e.getSource() == button[17]){
+			drawarea.undo();
 		} else if (e.getSource() == helpin) {
 			// Help info
 			helpobject.AboutBook();
