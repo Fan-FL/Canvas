@@ -59,6 +59,7 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 	private JCheckBox bold, italic;
 
 	private JComboBox stytles;
+	private Box userinfoBox;
 
 	Toolkit tool = getToolkit();
 	Dimension dim = tool.getScreenSize();// Get the size of current screen
@@ -198,9 +199,32 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 		// Initialization for the start bar
 		startbar = new JLabel("White Board");
 
+		
+		//Test only part
+		JButton add = new JButton("ADD");
+		add.addActionListener(this);
+		add.setActionCommand("add");
+		//add.setSize(200, 10);
+		
+
+		JLabel users = new JLabel("User Information");
+		users.setBackground(Color.DARK_GRAY);
+		users.setBorder(BorderFactory.createLineBorder(Color.black));
+		userinfoBox = Box.createVerticalBox();
+		userinfoBox.add(users);
+		userinfoBox.add(add);
+		userinfoBox.add(userInfo("Admin", "120.0.0.7"));
+		
 		userinfo = new JPanel();
-		userinfo.setLayout(new BorderLayout());
+		userinfo.setLayout(new BorderLayout(0,5));
+		//userinfo.setLayout(new BoxLayout(userinfo.getContentPane(), BoxLayout.Y_AXIS));
+		//userinfo.createVerticalBox();
+		userinfo.setBackground(Color.white);
+		userinfo.setBorder(BorderFactory.createLineBorder(Color.black));
 		userinfo.setPreferredSize(new Dimension(200, 10));
+		//userinfo.addView(add, 200, 10).size();
+		userinfo.add(userinfoBox,BorderLayout.NORTH);
+		
 
 		chat = new JPanel();
 		chat.setLayout(new BorderLayout(0, 10));
@@ -232,11 +256,23 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 	public void setStratBar(String s) {
 		startbar.setText(s);
 	}
-	/*
-	public JPanel userInfo(){
+
+	public JPanel userInfo(String userName, String ipAddress){
+		JPanel userinfo = new JPanel();
+		userinfo.setLayout(new BorderLayout());
+		JLabel username = new JLabel(" " + userName);
+		username.setBackground(Color.white);
+		JButton operation = new JButton("DELETE");
+		operation.addActionListener(this);
+		operation.setActionCommand("delete");
+		username.setToolTipText(ipAddress);
+		userinfo.add(username, BorderLayout.WEST);
+		userinfo.add(operation, BorderLayout.EAST);
+		userinfo.setBorder(BorderFactory.createLineBorder(Color.blue));
+		//userinfo.setPreferredSize(new Dimension(200,10));
+		return userinfo;
 		
 	}
-*/
 	public JPanel recvWindow() {
 		recvArea = new JTextArea(400, (dim.height - 130) * 2 / 3 - 50);
 
@@ -254,7 +290,7 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 		recviveAreaPanel = new JPanel();
 		recviveAreaPanel.setLayout(new BorderLayout());
 		recviveAreaPanel.add(chatRoomPanel, BorderLayout.NORTH);
-		recviveAreaPanel.add(recvArea, BorderLayout.CENTER);
+		recviveAreaPanel.add(recviveScroll, BorderLayout.CENTER);
 		// recviveAreaPanel.setSize(400,(dim.height-130)*2/3 - 50);
 		recviveAreaPanel.setPreferredSize(new Dimension(400,
 				(dim.height - 130) * 2 / 3 - 50));
@@ -272,7 +308,7 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 		sendArea.setLineWrap(true);
 		sendAreaPanel.setLayout(new BorderLayout());
 
-		sendAreaPanel.add(sendArea, BorderLayout.NORTH);
+		sendAreaPanel.add(sendScroll , BorderLayout.CENTER);
 		sendAreaPanel.setSize(400, (dim.height - 130) / 3 - 50);
 		sendAreaPanel.setBorder(BorderFactory.createLineBorder(Color.blue));
 		return sendAreaPanel;
@@ -281,6 +317,7 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 	public JPanel buttons() {
 		clear = new JButton("Clear");
 		send = new JButton("Send");
+		//send.setMnemonic(/n);
 
 		clear.addActionListener(this);
 		clear.setActionCommand("clear");
@@ -356,8 +393,12 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 			sendArea.setText("");
 		} else if (e.getActionCommand().equals("send")) {
 			recvArea.append(usermessage("Admin", "120.0.0.1") + "\n");
-			// System.out.println(usermessage("Admin", "120.0.0.7"));
 			sendArea.setText("");
+		}
+		else if(e.getActionCommand().equals("add")){
+			userinfoBox.add(userInfo("Admin", "120.0.0.7"));
+			userinfoBox.repaint();
+			//userinfo.add(userInfo("Admin", "120.0.0.7"));
 		}
 
 	}

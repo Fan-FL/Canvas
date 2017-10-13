@@ -29,7 +29,11 @@ public class WhiteBoardClient extends JFrame implements ActionListener {
     private Help helpobject;
     private FileHandler fileclass;
 
-	private JPanel userinfo;
+	private JPanel userinfo, users;
+	private JLabel userlist;
+	private JPanel userName;
+//	private JButton 
+	
 	private JPanel chat;
 
 	private JTextArea recvArea, sendArea;
@@ -203,7 +207,7 @@ public class WhiteBoardClient extends JFrame implements ActionListener {
 
 		chat = new JPanel();
 		chat.setLayout(new BorderLayout(0, 10));
-		chat.setPreferredSize(new Dimension(400, dim.height - 130));
+		chat.setPreferredSize(new Dimension(200, dim.height - 130));
 		chat.add(recvWindow(), BorderLayout.NORTH);
 		chat.add(sendWindow(), BorderLayout.CENTER);
 		chat.add(buttons(), BorderLayout.SOUTH);
@@ -217,8 +221,6 @@ public class WhiteBoardClient extends JFrame implements ActionListener {
         Container con = getContentPane(); // Get the canvas implemented
         con.add(buttonpanel, BorderLayout.NORTH);
         con.add(drawarea, BorderLayout.CENTER);
-        startbar.setText("a"+"\n"+"a"+"\n"+"c�����ӿ��˸������������Ϳ��˵����������������˴���ʿ��˾Ͱ��ķ����˾����ķ���˾Ͱ�˹�ٿɷ���Ⱒ˹�ٿ��˷��Ϳ�ʼ���żٿ����ǵľͿ����ǵľͷ������Ǵ�ҷ���˴����ݿ�������Ŀ����ļ�������ɶ��");
-        startbar.setBackground(new Color(0,0,0));
         con.add(startbar, BorderLayout.SOUTH);
         con.add(userinfo, BorderLayout.WEST);
         con.add(chat, BorderLayout.EAST);
