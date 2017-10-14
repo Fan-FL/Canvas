@@ -19,15 +19,14 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 	private JToolBar buttonpanel;
 	// define the button panel
 	private JMenuBar bar;
-	private JMenu file, color, stroke, help;
+	private JMenu file, color, stroke;
 	// four main menu of the button panel
 	private JMenuItem newfile, openfile, savefile, exit;
-	private JMenuItem helpin, helpmain, colorchoice, strokeitem;
+	private JMenuItem colorchoice, strokeitem;
 	private Icon nf, sf, of, ex;
 	// The icon objects of the button panel
 	private JLabel startbar;
 	private DrawArea drawarea;
-	private Help helpobject;
 	private FileHandler fileclass;
 
 	private JPanel userinfo;
@@ -42,14 +41,12 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 
 	String[] fontName;
 	// Define the name of the icons in the button panel
-	private String names[] = { "newfile", "openfile", "savefile", "pen",
-			"line", "rect", "frect", "oval", "foval", "circle", "fcircle",
+	private String names[] = {"pen","line", "rect", "frect", "oval", "foval", "circle", "fcircle",
 			"roundrect", "froundrect", "rubber", "color", "stroke", "word", "undo" };
 	private Icon icons[];
 
 	// Show instruction when the mouse moves above the button
-	private String tiptext[] = { "create a picture", "open a picture",
-			"save the picture", "freely draw", "draw a straight line",
+	private String tiptext[] = {"freely draw", "draw a straight line",
 			"draw a hollow rectangle", "draw a solid rectangle",
 			"draw a hollow oval", "draw a solid oval", "draw a hollow circle",
 			"draw a solid circle", "draw a rounded corner rectangle",
@@ -71,13 +68,13 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 		file = new JMenu("file");
 		color = new JMenu("color");
 		stroke = new JMenu("brush");
-		help = new JMenu("help");
 		bar = new JMenuBar();// initial menu
 
 		bar.add(file);
 		bar.add(color);
 		bar.add(stroke);
-		bar.add(help);
+        bar.setOpaque(true);
+        bar.setBackground(Color.cyan);
 
 		setJMenuBar(bar);
 
@@ -85,7 +82,6 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 		file.setMnemonic('F');
 		color.setMnemonic('C');
 		stroke.setMnemonic('S');
-		help.setMnemonic('H');
 
 		// File menu initialization
 		try {
@@ -132,16 +128,6 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 				InputEvent.CTRL_MASK));
 		colorchoice.addActionListener(this);
 		color.add(colorchoice);
-		// Initialization of the Help menu
-		helpmain = new JMenuItem("User document");
-		helpin = new JMenuItem("About this program");
-
-		// Add function to the help menu
-		help.add(helpmain);
-		help.addSeparator(); // Set a line between sub-menu
-		help.add(helpin);
-		helpin.addActionListener(this);
-		helpmain.addActionListener(this);
 
 		// Initialization for stroke menu
 		strokeitem = new JMenuItem("set brush");
@@ -199,21 +185,22 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 		// Initialization for the start bar
 		startbar = new JLabel("White Board");
 
-		
-		//Test only part
+		//This "add" button is for test purpose
 		JButton add = new JButton("ADD");
 		add.addActionListener(this);
 		add.setActionCommand("add");
-		//add.setSize(200, 10);
-		
-
-		JLabel users = new JLabel("User Information");
-		users.setBackground(Color.DARK_GRAY);
+        
+		JPanel top = new JPanel();
+		top.setLayout(new BorderLayout());
+		JLabel users = new JLabel("  User Information");
+		users.setOpaque(true);
+		users.setBackground(Color.cyan);
 		users.setBorder(BorderFactory.createLineBorder(Color.black));
-		userinfoBox = Box.createVerticalBox();
-		userinfoBox.add(users);
-		userinfoBox.add(add);
-		userinfoBox.add(userInfo("Admin", "120.0.0.7"));
+		setUserinfoBox(Box.createVerticalBox());
+		top.add(users, BorderLayout.NORTH);
+		top.add(add,BorderLayout.CENTER);
+		getUserinfoBox().add(top);
+		getUserinfoBox().add(userInfo("Admin", "120.0.0.7"));
 		
 		userinfo = new JPanel();
 		userinfo.setLayout(new BorderLayout(0,5));
@@ -223,7 +210,7 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 		userinfo.setBorder(BorderFactory.createLineBorder(Color.black));
 		userinfo.setPreferredSize(new Dimension(200, 10));
 		//userinfo.addView(add, 200, 10).size();
-		userinfo.add(userinfoBox,BorderLayout.NORTH);
+		userinfo.add(getUserinfoBox(),BorderLayout.NORTH);
 		
 
 		chat = new JPanel();
@@ -235,7 +222,6 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 
 		// Initialization for the canvas
 		drawarea = new DrawArea(this);
-		helpobject = new Help(this);
 		fileclass = new FileHandler(this, drawarea);
 
 		Container con = getContentPane(); // Get the canvas implemented
@@ -277,6 +263,8 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 		recvArea = new JTextArea(400, (dim.height - 130) * 2 / 3 - 50);
 
 		chatRoom = new JLabel("The Chat Room");
+		chatRoom.setOpaque(true);
+		chatRoom.setBackground(Color.cyan);
 		chatRoomPanel = new JPanel();
 		chatRoomPanel.setLayout(new GridLayout());
 		chatRoomPanel.add(chatRoom);
@@ -349,46 +337,40 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		for (int i = 3; i <= 13; i++) {
+		for (int i = 0; i <= 10; i++) {
 			if (e.getSource() == button[i]) {
-				drawarea.setCurrentShapeType(DrawArea.ShapeType.values()[i - 3]);
+				drawarea.setCurrentShapeType(DrawArea.ShapeType.values()[i]);
 				drawarea.repaint();
 			}
 
 		}
-		if (e.getSource() == newfile || e.getSource() == button[0]) {
+		if (e.getSource() == newfile) {
 			// new file
 			fileclass.newFile();
-		} else if (e.getSource() == openfile || e.getSource() == button[1]) {
+		} else if (e.getSource() == openfile) {
 			// open file
 			fileclass.openFile();
-		} else if (e.getSource() == savefile || e.getSource() == button[2]) {
+		} else if (e.getSource() == savefile) {
 			// save file
 			fileclass.saveFile();
 		} else if (e.getSource() == exit) {
 			// exit
 			System.exit(0);
-		} else if (e.getSource() == button[14] || e.getSource() == colorchoice) {
+		} else if (e.getSource() == button[11] || e.getSource() == colorchoice) {
 			// color plate
 			drawarea.chooseColor();// Choose your color
-		} else if (e.getSource() == button[15] || e.getSource() == strokeitem) {
+		} else if (e.getSource() == button[12] || e.getSource() == strokeitem) {
 			// Brush size
 			drawarea.setStroke();
-		} else if (e.getSource() == button[16]) {
+		} else if (e.getSource() == button[13]) {
 			// add text
 			JOptionPane.showMessageDialog(null,
 					"please click on canvs to confirm position of textinput",
 					"hints", JOptionPane.INFORMATION_MESSAGE);
 			drawarea.setCurrentShapeType(DrawArea.ShapeType.WORD);
 			drawarea.repaint();
-		} else if (e.getSource() == button[17]){
+		} else if (e.getSource() == button[14]){
 			drawarea.undo();
-		} else if (e.getSource() == helpin) {
-			// Help info
-			helpobject.AboutBook();
-		} else if (e.getSource() == helpmain) {
-			// About this program
-			helpobject.MainHeip();
 		} else if (e.getActionCommand().equals("clear")) {
 			sendArea.setText("");
 		} else if (e.getActionCommand().equals("send")) {
@@ -396,11 +378,19 @@ public class WhiteBoardServer extends JFrame implements ActionListener {
 			sendArea.setText("");
 		}
 		else if(e.getActionCommand().equals("add")){
-			userinfoBox.add(userInfo("Admin", "120.0.0.7"));
-			userinfoBox.repaint();
+			getUserinfoBox().add(userInfo("Admin", "120.0.0.7"));
+			getUserinfoBox().repaint();
 			//userinfo.add(userInfo("Admin", "120.0.0.7"));
 		}
 
+	}
+
+	public Box getUserinfoBox() {
+		return userinfoBox;
+	}
+
+	public void setUserinfoBox(Box userinfoBox) {
+		this.userinfoBox = userinfoBox;
 	}
 
 	// About the font of the character

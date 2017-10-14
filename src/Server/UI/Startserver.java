@@ -4,13 +4,20 @@ import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 import javax.swing.*;
+
+import Server.ServerThread;
 
 //import Proj1.server.ServerThread;
 
 public class Startserver implements ActionListener{
     JFrame startFrame = new JFrame("Mini-Canvas  Start Server");
+    private JTextField portNumber;
+    private String myPort;
 
     
     public void startServer(){
@@ -23,7 +30,7 @@ public class Startserver implements ActionListener{
         JPanel text = new JPanel();
         JLabel background = new JLabel();
         JLabel port = new JLabel("   Your port number:");
-        JTextField portNumber = new JTextField(15);
+        portNumber = new JTextField(15);
         JButton start = new JButton(" Start ");
         JButton exit = new JButton("     Exit    ");
         
@@ -65,13 +72,26 @@ public class Startserver implements ActionListener{
     public void actionPerformed(ActionEvent e) {  
         if(e.getActionCommand().equals("start")){  
 			@SuppressWarnings("unused")
-            WhiteBoardServer whiteBoard = new WhiteBoardServer("Mini-Canvas Server");
-        	startFrame.dispose();
+			ServerThread server_thread = new ServerThread(null);
+			setMyPort(portNumber.getText());
+			server_thread.run();
+			// need to make sure the server starts before the implementation of white board
+	        WhiteBoardServer whiteBoard = new WhiteBoardServer("Mini-Canvas Server");
+	        startFrame.dispose();
+
         	
         }  
         if(e.getActionCommand().equals("exit")){  
             System.exit(0);  
         }  
     }
+
+	public String getMyPort() {
+		return myPort;
+	}
+
+	public void setMyPort(String myPort) {
+		this.myPort = myPort;
+	}
 }
 

@@ -48,7 +48,7 @@ public class FileHandler {
         fileName.canRead();
         if (fileName == null || fileName.getName().equals("")) {
             //When file name does not exit
-            JOptionPane.showMessageDialog(filechooser, "File name", "Please input filename！", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(filechooser, "File name", "Please input filename!", JOptionPane.ERROR_MESSAGE);
         } else {
             try {
                 drawarea.clearCanvas();
@@ -65,11 +65,11 @@ public class FileHandler {
                 input.close();
                 drawarea.repaint();
             } catch (FileNotFoundException e) {
-                JOptionPane.showMessageDialog(whiteboard, "File path error！", "Source file not found！", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(whiteboard, "File path error", "Source file not found!", JOptionPane.ERROR_MESSAGE);
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(whiteboard, "File read error！", "Cannot read this file", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(whiteboard, "File read error", "Cannot read this file", JOptionPane.ERROR_MESSAGE);
             } catch (ClassNotFoundException e) {
-                JOptionPane.showMessageDialog(whiteboard, "Create object error！", "Already at the end of the file", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(whiteboard, "Create object error", "Already at the end of the file!", JOptionPane.ERROR_MESSAGE);
             }
 
         }
@@ -90,7 +90,7 @@ public class FileHandler {
         fileName.canWrite();
         if (fileName == null || fileName.getName().equals("")){
             //If the file name does not exit
-            JOptionPane.showMessageDialog(filechooser, "File name", "Please input file name！", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(filechooser, "File name", "Please input file name!", JOptionPane.ERROR_MESSAGE);
         } else {
             try {
                 fileName.delete();
